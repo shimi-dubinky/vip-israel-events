@@ -29,7 +29,7 @@ const TestimonialsPage = () => {
   return (
     <div className="py-12 bg-gray-50">
       <div className="container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">What Our Clients Say</h1>
+        <h1 className="text-4xl font-bold text-center mb-12 text-gray-800 font-serif">What Our Clients Say</h1>
         <div className="space-y-8">
           {testimonials.map(testimonial => (
             <blockquote key={testimonial.id} className="bg-white p-8 rounded-lg shadow-md max-w-3xl mx-auto">

@@ -31,7 +31,7 @@ const ContactPage = () => {
   return (
     <div className="py-12 bg-gray-50">
       <div className="container mx-auto px-4 max-w-2xl">
-        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800">Contact Us</h1>
+        <h1 className="text-4xl font-bold text-center mb-8 text-gray-800 font-serif">Contact Us</h1>
         <p className="text-center text-gray-600 mb-10">
           Ready to plan the event of a lifetime? Fill out the form below and we'll be in touch shortly.
         </p>

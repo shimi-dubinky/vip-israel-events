@@ -25,7 +25,7 @@ const EventsPage = () => {
 
   return (
     <div className="py-12">
-      <h1 className="text-4xl font-bold text-center mb-12 text-gray-800">Our Signature Events</h1>
+      <h1 className="text-4xl font-bold text-center mb-12 text-gray-800 font-serif">Our Signature Events</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {events.map(event => (
           <div key={event.id} className="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform">

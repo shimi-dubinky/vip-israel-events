@@ -6,7 +6,7 @@ import Footer from './Footer'; // The new import
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-background">
       <Header />
       <main className="flex-grow p-5 container mx-auto">
         {children}
