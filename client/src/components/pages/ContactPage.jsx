@@ -1,14 +1,20 @@
 // src/components/pages/ContactPage.jsx
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 const ContactPage = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     message: '',
   });
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,10 +24,22 @@ const ContactPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Thank you, ${formData.name}! Your message has been received.`);
-    console.log(formData);
+    setIsSubmitting(true);
+    setSubmitMessage('');
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/contact', formData);
+      console.log('Response from server:', response.data);
+      setSubmitMessage(t('contact_success_message', { name: formData.name }));
+      setFormData({ name: '', email: '', phone: '', message: '' }); // Clear form on success
+    } catch (error) {
+      console.error('There was an error submitting the form:', error);
+      setSubmitMessage(t('contact_error_message'));
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -38,7 +56,7 @@ const ContactPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          Contact Us
+          {t('contact_title')}
         </motion.h1>
         <motion.p 
           className="text-center text-secondary mb-10"
@@ -46,7 +64,7 @@ const ContactPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          Ready to plan the event of a lifetime? Fill out the form below and we'll be in touch shortly.
+          {t('contact_subtitle')}
         </motion.p>
         <motion.form 
           onSubmit={handleSubmit} 
@@ -56,25 +74,32 @@ const ContactPage = () => {
           transition={{ duration: 0.5, delay: 0.6 }}
         >
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-text-main mb-1">Full Name</label>
+            <label htmlFor="name" className="block text-sm font-medium text-text-main mb-1">{t('form_name')}</label>
             <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors" required />
           </div>
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-text-main mb-1">Email Address</label>
+            <label htmlFor="email" className="block text-sm font-medium text-text-main mb-1">{t('form_email')}</label>
             <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors" required />
           </div>
           <div>
-            <label htmlFor="phone" className="block text-sm font-medium text-text-main mb-1">Phone Number (Optional)</label>
+            <label htmlFor="phone" className="block text-sm font-medium text-text-main mb-1">{t('form_phone')}</label>
             <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full p-3 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors" />
           </div>
           <div>
-            <label htmlFor="message" className="block text-sm font-medium text-text-main mb-1">Tell us about your event</label>
+            <label htmlFor="message" className="block text-sm font-medium text-text-main mb-1">{t('form_message')}</label>
             <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows="5" className="w-full p-3 border border-gray-300 rounded-md focus:ring-accent focus:border-accent transition-colors" required></textarea>
           </div>
-          <button type="submit" className="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition-colors text-lg">
-            Send Message
+          <button 
+            type="submit" 
+            className="w-full bg-primary text-white font-bold py-3 rounded-lg hover:bg-opacity-90 transition-colors text-lg disabled:bg-gray-400"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Sending...' : t('form_button')}
           </button>
-        </motion.form> 
+          
+          {/* Display success or error message */}
+          {submitMessage && <p className={`mt-4 text-center font-medium ${submitMessage.includes('Sorry') ? 'text-red-500' : 'text-green-600'}`}>{submitMessage}</p>}
+        </motion.form>
       </div>
     </motion.div>
   );

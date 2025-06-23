@@ -1,0 +1,36 @@
+{
+  "site_name": "M.L.T VIP",
+  "nav_home": "Home",
+  "nav_events": "Our Events",
+  "nav_testimonials": "Testimonials",
+  "nav_gallery": "Gallery",
+  "nav_contact": "Contact Us",
+  "hero_title": "Your Unforgettable Israeli Milestone, Perfectly Orchestrated",
+  "hero_subtitle": "From breathtaking Bar Mitzvahs at the Kotel to joyous family celebrations, we handle every detail with precision, care, and exclusive access.",
+  "hero_button": "Plan Your Event Today",
+  "events_title": "Our Signature Experiences",
+  "events": [
+    { "title": "Bar & Bat Mitzvahs", "description": "Unforgettable celebrations at the heart of Jewish history." },
+    { "title": "Community Delegations", "description": "Meaningful journeys that connect your community to Israel." },
+    { "title": "Luxury Vacations", "description": "Bespoke travel experiences, crafted to perfection." }
+  ],
+  "why_us_title": "Bespoke Service, Unmatched Access",
+  "why_us_subtitle": "We believe that luxury is personal. Our team is dedicated to understanding your unique vision and bringing it to life with meticulous planning and exclusive connections that only we can provide.",
+  "why_us_points": [
+    "24/7 Personal Concierge",
+    "Access to exclusive venues and leading figures",
+    "Complete peace of mind from arrival to departure"
+  ],
+  "testimonials_title": "What Our Clients Say",
+  "gallery_title": "Our Gallery",
+  "contact_title": "Contact Us",
+  "contact_subtitle": "Ready to plan the event of a lifetime? Fill out the form below and we'll be in touch shortly.",
+  "form_name": "Full Name",
+  "form_email": "Email Address",
+  "form_phone": "Phone Number (Optional)",
+  "form_message": "Tell us about your event",
+  "form_button": "Send Message",
+  "footer_rights": "All Rights Reserved",
+  "contact_success_message": "Thank you, {{name}}! Your message has been sent successfully.",
+  "contact_error_message": "Sorry, there was an error sending your message. Please try again later."
+}
