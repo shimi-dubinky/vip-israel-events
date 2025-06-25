@@ -1,14 +1,12 @@
 // src/components/layout/MainLayout.jsx
-import Header from './Header';
-import Footer from './Footer'; // The new import
-
-// The old Footer component that was here is now deleted.
+import { Header } from './Header'; // Changed to named import
+import Footer from './Footer';
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-primary">
       <Header />
-      <main className="flex-grow p-5 container mx-auto">
+      <main className="flex-grow">
         {children}
       </main>
       <Footer />

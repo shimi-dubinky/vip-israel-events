@@ -1,5 +1,5 @@
 {
-  "site_name": "M.L.T VIP",
+  "site_name": "A.M.T VIP",
   "nav_home": "Home",
   "nav_events": "Our Events",
   "nav_testimonials": "Testimonials",
@@ -32,5 +32,16 @@
   "form_button": "Send Message",
   "footer_rights": "All Rights Reserved",
   "contact_success_message": "Thank you, {{name}}! Your message has been sent successfully.",
-  "contact_error_message": "Sorry, there was an error sending your message. Please try again later."
+  "contact_error_message": "Sorry, there was an error sending your message. Please try again later.",
+  "gallery_title": "Our Gallery",
+  "gallery_subtitle": "Explore a curated collection of unforgettable moments and exclusive experiences we've crafted for our clients.",
+  "gallery_cat_all": "All",
+  "gallery_cat_events": "Events",
+  "gallery_cat_tours": "Tours",
+  "gallery_cat_celebrations": "Celebrations",
+  "Elegant event setting": "Elegant event setting",
+  "Helicopter tour over Jerusalem": "Helicopter tour over Jerusalem",
+  "Luxury dinner table": "Luxury dinner table",
+  "Bar Mitzvah at the Kotel": "Bar Mitzvah at the Kotel",
+  "View of the Western Wall": "View of the Western Wall"
 }

@@ -1,5 +1,5 @@
 {
-  "site_name": "M.L.T VIP",
+  "site_name": "A.M.T VIP",
   "nav_home": "בית",
   "nav_events": "האירועים שלנו",
   "nav_testimonials": "ממליצים",
@@ -11,7 +11,7 @@
   "events_title": "חוויות ייחודיות שאנו מציעים",
   "events": [
     { "title": "בר ובת מצווה", "description": "חגיגות בלתי נשכחות בלב ההיסטוריה היהודית." },
-    { "title": "משלחות קהילתיות", "description": "מסעות משמעותיים שמחברים את הקהילה שלכם לארץ ולאנשי ישראל." },
+    { "title": "משלחות קהילתיות", "description": "מסעות משמעותיים שמחברים את הקהילה שלכם לארץ ישראל." },
     { "title": "חופשות יוקרה", "description": "חוויות טיול מותאמות אישית, מעוצבות לשלמות עבור משפחתכם." }
   ],
   "why_us_title": "שירות אישי, גישה שאין לאחרים",
@@ -32,5 +32,15 @@
   "form_button": "שלח הודעה",
   "footer_rights": "כל הזכויות שמורות",
   "contact_success_message": "תודה, {{name}}! הודעתך התקבלה בהצלחה.",
-  "contact_error_message": "אירעה שגיאה בשליחת ההודעה. אנא נסה שוב מאוחר יותר."
+  "contact_error_message": "אירעה שגיאה בשליחת ההודעה. אנא נסה שוב מאוחר יותר.",
+  "gallery_subtitle": "גלו אוסף נבחר של רגעים בלתי נשכחים וחוויות אקסקלוסיביות שיצרנו עבור לקוחותינו.",
+  "gallery_cat_all": "הכל",
+  "gallery_cat_events": "אירועים",
+  "gallery_cat_tours": "סיורים",
+  "gallery_cat_celebrations": "שמחות",
+  "Elegant event setting": "עיצוב אירוע אלגנטי",
+  "Helicopter tour over Jerusalem": "סיור מסוקים מעל ירושלים",
+  "Luxury dinner table": "שולחן ארוחת ערב יוקרתי",
+  "Bar Mitzvah at the Kotel": "בר מצווה בכותל",
+  "View of the Western Wall": "מבט על הכותל המערבי"
 }

@@ -4,7 +4,6 @@ import MainLayout from './components/layout/MainLayout';
 import HomePage from './components/pages/HomePage';
 import GalleryPage from './components/pages/GalleryPage';
 import ContactPage from './components/pages/ContactPage';
-
 import { useTranslation } from 'react-i18next'; // Import the hook
 import { useEffect } from 'react'; // Import useEffect
 

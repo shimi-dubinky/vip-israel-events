@@ -1,16 +1,14 @@
 // src/components/layout/Header.jsx
 import { useState, useEffect } from 'react';
-// Renaming imports to avoid conflicts, a very good practice!
 import { Link as RouterLink } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';
 import { useTranslation } from 'react-i18next';
 
-const Header = () => {
+export const Header = () => {
   const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
-  // This function will run on every scroll event
   const changeBackground = () => {
     if (window.scrollY >= 80) {
       setHasScrolled(true);
@@ -21,13 +19,9 @@ const Header = () => {
 
   useEffect(() => {
     window.addEventListener('scroll', changeBackground);
-    // Cleanup the event listener when the component is removed
-    return () => {
-      window.removeEventListener('scroll', changeBackground);
-    };
+    return () => window.removeEventListener('scroll', changeBackground);
   }, []);
 
-  // Navigation links data, now using the 't' function for translation
   const navLinks = [
     { name: t('nav_home'), href: '/', isPage: true },
     { name: t('nav_events'), href: 'events', isPage: false },
@@ -36,87 +30,68 @@ const Header = () => {
     { name: t('nav_contact'), href: '/contact', isPage: true },
   ];
 
-  // Helper component for smart navigation links
-  const NavLink = ({ href, children, isPage, onClick, className: extraClassName = '' }) => {
-    const baseTextColor = hasScrolled ? 'text-secondary' : 'text-white';
-    const hoverColor = hasScrolled ? 'hover:text-accent' : 'hover:text-gray-200';
-    const className = `${baseTextColor} font-medium ${hoverColor} transition-colors cursor-pointer ${extraClassName}`;
+  const NavLink = ({ href, children, isPage, onClick }) => {
+    const baseTextColor = hasScrolled ? 'text-secondary' : 'text-lightest-slate';
+    const hoverColor = 'hover:text-accent-gold-bright';
+    const className = `${baseTextColor} font-medium ${hoverColor} transition-colors cursor-pointer`;
 
     if (isPage) {
       return <RouterLink to={href} className={className} onClick={onClick}>{children}</RouterLink>;
     }
     return (
-      <ScrollLink
-        to={href}
-        spy={true}
-        smooth={true}
-        offset={-80}
-        duration={500}
-        className={className}
-        onClick={onClick}
-      >
+      <ScrollLink to={href} spy={true} smooth={true} offset={-80} duration={800} className={className} onClick={onClick}>
         {children}
       </ScrollLink>
     );
   };
 
   return (
-    <header className={`sticky top-0 z-30 transition-all duration-300 ${hasScrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${hasScrolled ? 'bg-primary/80 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'}`}>
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-        {/* Site Logo/Name */}
         <div>
-          <RouterLink to="/" className={`text-2xl font-bold transition-colors ${hasScrolled ? 'text-primary' : 'text-white'} font-serif`}>
+          <RouterLink to="/" className={`text-2xl font-bold transition-colors ${hasScrolled ? 'text-lightest-slate' : 'text-white'} font-serif`}>
             {t('site_name')}
           </RouterLink>
         </div>
-
-        {/* Desktop Menu & Language Switcher */}
         <div className="hidden md:flex items-center">
           <div className="flex gap-x-8">
             {navLinks.map((link) => (
               <NavLink key={link.name} href={link.href} isPage={link.isPage}>{link.name}</NavLink>
             ))}
           </div>
-          <div className='flex items-center border-s ms-8 ps-8 space-x-2 border-gray-500/30'>
-             <button onClick={() => i18n.changeLanguage('en')} className={`font-medium transition-colors ${i18n.language.startsWith('en') ? 'text-accent' : (hasScrolled ? 'text-primary' : 'text-white')}`}>EN</button>
-             <span className={hasScrolled ? 'text-primary' : 'text-white'}>/</span>
-             <button onClick={() => i18n.changeLanguage('he')} className={`font-medium transition-colors ${i18n.language === 'he' ? 'text-accent' : (hasScrolled ? 'text-primary' : 'text-white')}`}>HE</button>
+          <div className='flex items-center border-s border-white/20 ms-8 ps-8 space-x-2'>
+            <button onClick={() => i18n.changeLanguage('en')} className={`font-medium transition-colors ${i18n.language.startsWith('en') ? 'text-accent-gold-bright' : (hasScrolled ? 'text-lightest-slate' : 'text-white')}`}>EN</button>
+            <span className={hasScrolled ? 'text-lightest-slate' : 'text-white'}>/</span>
+            <button onClick={() => i18n.changeLanguage('he')} className={`font-medium transition-colors ${i18n.language === 'he' ? 'text-accent-gold-bright' : (hasScrolled ? 'text-lightest-slate' : 'text-white')}`}>HE</button>
           </div>
         </div>
-        
-        {/* Mobile Menu Button (Hamburger) */}
         <div className="md:hidden">
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={hasScrolled ? 'text-primary' : 'text-white'}>
+          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className={hasScrolled ? 'text-lightest-slate' : 'text-white'}>
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
           </button>
         </div>
       </nav>
-
-      {/* Mobile Menu (Drawer) */}
       {isMenuOpen && (
-        <div className="md:hidden fixed top-0 left-0 w-full h-screen bg-white z-20 p-6 flex flex-col">
-           <div className="flex justify-end mb-8">
-              <button onClick={() => setIsMenuOpen(false)}>
-                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-              </button>
-           </div>
+        <div className="md:hidden fixed top-0 left-0 w-full h-screen bg-primary/95 backdrop-blur-lg z-40 p-6 flex flex-col">
+          <div className="flex justify-end mb-8">
+            <button onClick={() => setIsMenuOpen(false)}>
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </div>
           <div className="flex flex-col items-center justify-center flex-grow space-y-10">
             {navLinks.map((link) => (
-              <NavLink 
-                key={link.name} 
-                href={link.href} 
-                isPage={link.isPage}
-                onClick={() => setIsMenuOpen(false)}
-                className="text-3xl !text-primary" // Override text color for mobile menu
-              >
-                {link.name}
+              <NavLink key={link.name} href={link.href} isPage={link.isPage} onClick={() => setIsMenuOpen(false)}>
+                 <span className='text-3xl !text-lightest-slate font-serif'>{link.name}</span>
               </NavLink>
             ))}
+            <div className='flex items-center pt-8 mt-8 border-t border-white/20 space-x-4'>
+              <button onClick={() => {i18n.changeLanguage('en'); setIsMenuOpen(false);}} className={`text-xl font-medium transition-colors ${i18n.language.startsWith('en') ? 'text-accent-gold-bright' : 'text-white'}`}>EN</button>
+              <span className="text-white">/</span>
+              <button onClick={() => {i18n.changeLanguage('he'); setIsMenuOpen(false);}} className={`text-xl font-medium transition-colors ${i18n.language === 'he' ? 'text-accent-gold-bright' : 'text-white'}`}>HE</button>
+            </div>
           </div>
         </div>
       )}
     </header>
   );
 };
-
-export default Header;

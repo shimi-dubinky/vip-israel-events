@@ -5,21 +5,24 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-  extend: {
-    fontFamily: {
-      sans: ['Inter', 'sans-serif'],
-      serif: ['Instrument Serif', 'serif'],
-    },
+    extend: {
       colors: {
-      'primary': '#0D2A4C',      // Deep Navy Blue
-      'secondary': '#4A5568',    // Slate Gray
-      'accent': '#BFA06A',        // Muted Gold
-      'background': '#F7FAFC',   // Light Grayish Blue
-      'text-main': '#2D3748',    // Charcoal
-    }
+        'primary': '#0D1B2A',      
+        'secondary': '#8892b0',   
+        'lightest-slate': '#ccd6f6',
+        'card-bg': 'rgba(255, 255, 255, 0.05)',
+        
+        // פלטת הזהב המדויקת שלך
+        'gold-base': '#D4A574',       // זהב בסיס
+        'gold-shadow': '#B8860B',    // זהב עמוק לצללים
+        'gold-highlight': '#E6C88A', // זהב בהיר להדגשות
+        'gold-dark-details': '#A0522D', // לפרטים כהים
+      },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        serif: ['"Playfair Display"', 'serif'],
+      },
+    },
   },
-},
   plugins: [],
 }
-
-

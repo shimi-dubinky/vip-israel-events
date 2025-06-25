@@ -3,5 +3,7 @@
 @tailwind utilities;
 
 body {
-  @apply font-sans;
+  @apply bg-primary text-secondary; /* Apply dark theme globally */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
