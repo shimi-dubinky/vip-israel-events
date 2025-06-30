@@ -3,11 +3,15 @@ import MainLayout from './components/layout/MainLayout';
 import HomePage from './components/pages/HomePage';
 import GalleryPage from './components/pages/GalleryPage';
 import ContactPage from './components/pages/ContactPage';
+import NotFoundPage from './components/pages/NotFoundPage';
+
+// אזור הניהול
 import AdminLoginPage from './components/pages/AdminLoginPage';
 import AdminDashboardPage from './components/pages/AdminDashboardPage';
-import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 import AdminGalleryPage from './components/admin/AdminGalleryPage';
 import AdminTestimonialsPage from './components/admin/AdminTestimonialsPage';
+import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
+
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
@@ -22,6 +26,7 @@ function App() {
 
   const isAdminRoute = location.pathname.startsWith('/admin');
 
+  // נתיבים של ממשק הניהול (מוצגים ללא הלייאאוט הראשי)
   if (isAdminRoute) {
     return (
       <Routes>
@@ -31,16 +36,22 @@ function App() {
           <Route path="/admin/gallery" element={<AdminGalleryPage />} />
           <Route path="/admin/testimonials" element={<AdminTestimonialsPage />} />
         </Route>
+        {/* נתיב 404 לאזור הניהול */}
+        <Route path="/admin/*" element={<NotFoundPage />} />
       </Routes>
     );
   }
 
+  // נתיבים ציבוריים (מוצגים עם הלייאאוט הראשי)
   return (
     <MainLayout>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/gallery" element={<GalleryPage />} />
         <Route path="/contact" element={<ContactPage />} />
+
+        {/* נתיב "תפוס הכל" (Catch-all) ל-404. חייב להיות אחרון! */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </MainLayout>
   );
