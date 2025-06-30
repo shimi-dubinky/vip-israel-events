@@ -1,7 +1,5 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-// 1. הסרנו את שורת ה-import של הווידאו מכאן
-// import heroVideo from '../../assets/videos/hero-video.mp4';
 
 export const PremiumHero = () => {
   const { t } = useTranslation();

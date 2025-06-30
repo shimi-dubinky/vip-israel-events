@@ -33,7 +33,6 @@
   "footer_rights": "All Rights Reserved",
   "contact_success_message": "Thank you, {{name}}! Your message has been sent successfully.",
   "contact_error_message": "Sorry, there was an error sending your message. Please try again later.",
-  "gallery_title": "Our Gallery",
   "gallery_subtitle": "Explore a curated collection of unforgettable moments and exclusive experiences we've crafted for our clients.",
   "gallery_cat_all": "All",
   "gallery_cat_events": "Events",
@@ -43,5 +42,14 @@
   "Helicopter tour over Jerusalem": "Helicopter tour over Jerusalem",
   "Luxury dinner table": "Luxury dinner table",
   "Bar Mitzvah at the Kotel": "Bar Mitzvah at the Kotel",
-  "View of the Western Wall": "View of the Western Wall"
+  "View of the Western Wall": "View of the Western Wall",
+  "cat_celebrations_title": "Celebrations",
+  "cat_celebrations_desc": "Producing Bar/Bat Mitzvahs, weddings, and special family events in a luxurious Jewish atmosphere.",
+  "cat_community_title": "Community Events",
+  "cat_community_desc": "Organizing retreats and seminars for communities and organizations, with meaningful and experiential content.",
+  "cat_family_trip_title": "Family Trip to Israel",
+  "cat_family_desc": "Custom-tailored private tours for families, combining luxury, comfort, and a deep dive into Israeli heritage.",
+  "cat_holidays_title": "Holidays in the Holy Land",
+  "cat_holidays_desc": "An unforgettable holiday experience in Israel, including prayer arrangements, luxury hospitality, and unique activities.",
+  "all": "All"
 }

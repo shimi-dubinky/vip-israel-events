@@ -1,37 +1,150 @@
-// src/components/home/TestimonialsCarousel.jsx
 import { motion } from "framer-motion";
-import { useRef } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import axios from 'axios';
 
-const TestimonialCard = ({ testimonial }) => (
-  <motion.div className="bg-card-bg backdrop-blur-lg border border-white/10 p-8 rounded-2xl shadow-xl w-[380px] md:w-[450px] flex-shrink-0" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-      <blockquote className="h-full flex flex-col">
-          <svg className="w-10 h-10 text-accent-gold-deep mb-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.344 3.237a1.5 1.5 0 012.312 0L15.5 7.586a1.5 1.5 0 01-1.156 2.513h-1.018a.75.75 0 00-.75.75v5.043a.75.75 0 00.75.75h1.5a.75.75 0 010 1.5h-1.5a2.25 2.25 0 01-2.25-2.25v-5.043a2.25 2.25 0 012.25-2.25h1.018a.75.75 0 00.578-1.257L10.438 4.3l-.794.793a.75.75 0 01-1.06-1.06l1.75-1.75a.75.75 0 011.06 0L13 3.828a.75.75 0 001.156-.977L11.07 1.437a3 3 0 00-4.624 0L3.29 5.854a.75.75 0 00.578 1.257h1.018a2.25 2.25 0 012.25 2.25v5.043a2.25 2.25 0 01-2.25-2.25h-1.5a.75.75 0 010-1.5h1.5a.75.75 0 00.75-.75V8.5a.75.75 0 00-.75-.75H4.868a1.5 1.5 0 01-1.156-2.513L7.556 1.437a3 3 0 002.312-2.312z" clipRule="evenodd" /></svg>
-          <p className="text-lg text-secondary italic leading-relaxed flex-grow">"{testimonial.quote}"</p>
-          <footer className="mt-6 flex items-center"><img src={testimonial.avatar} alt={testimonial.author} className="w-14 h-14 rounded-full mr-4 object-cover border-2 border-accent-gold-deep/30"/><div><p className="font-bold text-lightest-slate">{testimonial.author}</p><p className="text-sm text-secondary">{testimonial.origin}</p></div></footer>
-      </blockquote>
-  </motion.div>
-);
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, A11y } from 'swiper/modules';
+import Lightbox from "yet-another-react-lightbox";
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+
+const TestimonialCard = ({ testimonial, onImageClick }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const isMediaCard = testimonial.mediaType === 'image' || testimonial.mediaType === 'video';
+  const isLongText = testimonial.mediaType === 'quote' && testimonial.content.length > 150;
+
+  const handleCardClick = () => {
+    if (testimonial.mediaType === 'image') {
+      onImageClick();
+    }
+  };
+
+  return (
+    <motion.div 
+      className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group ${isMediaCard ? 'cursor-pointer' : ''}`}
+      onClick={handleCardClick}
+      whileHover={{ 
+        boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)",
+        borderColor: "rgba(59, 130, 246, 0.3)"
+      }}
+    >
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+      <div className="relative h-full flex flex-col justify-between z-10">
+        <div className="flex-grow flex items-center justify-center text-center overflow-auto scrollbar-hide p-1">
+          {testimonial.mediaType === 'quote' && (
+            <div className="relative">
+              <p className={`font-light text-xl leading-8 text-slate-200 transition-all duration-500 ${isLongText && !isExpanded ? 'line-clamp-6' : ''}`}>
+                "{testimonial.content}"
+              </p>
+              {isLongText && (
+                <button onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }} className="text-gold-base hover:text-gold-highlight font-semibold mt-2">
+                  {isExpanded ? 'הצג פחות' : 'קרא עוד...'}
+                </button>
+              )}
+            </div>
+          )}
+          {isMediaCard && (
+            <div className="w-full h-full rounded-2xl overflow-hidden">
+                {/* שימוש ב-object-cover כדי שהתמונה תמיד תמלא את הריבוע */}
+              {testimonial.mediaType === 'image' && <img src={testimonial.content} alt={`Testimonial from ${testimonial.author}`} className="w-full h-full object-cover shadow-2xl" />}
+              {testimonial.mediaType === 'video' && <video src={testimonial.content} className="w-full h-full object-cover shadow-2xl" controls onClick={(e) => e.stopPropagation()} />}
+            </div>
+          )}
+        </div>
+        <footer className="mt-4 flex items-center pt-4 border-t border-white/10 flex-shrink-0">
+          <div className="relative"><img src={testimonial.thumbnailUrl} alt={testimonial.author} className="w-14 h-14 rounded-full mr-4 object-cover border-2 border-white/20 shadow-lg"/>
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-500/20" />
+          </div>
+          <div>
+            <p className="font-semibold text-white text-base tracking-wide">{testimonial.author}</p>
+            <p className="text-sm text-slate-400 mt-1">{testimonial.origin}</p>
+          </div>
+        </footer>
+      </div>
+    </motion.div>
+  );
+};
+
+const ChevronLeft = () => ( <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg> );
+const ChevronRight = () => ( <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg> );
 
 export const TestimonialsCarousel = () => {
     const { t } = useTranslation();
-    const carouselRef = useRef(null);
-    const testimonials = [
-        { id: 1, quote: "Working with them was the best decision we made.", author: "The Cohen Family", origin: "New York, NY", avatar: "https://randomuser.me/api/portraits/men/32.jpg" },
-        { id: 2, quote: "An absolutely magical experience...", author: "Rabbi Shmuel Goldstein", origin: "Congregation Beth Jacob, LA", avatar: "https://randomuser.me/api/portraits/men/51.jpg" },
-        { id: 3, quote: "They turned our dream family vacation into a reality...", author: "Sarah & Michael Rosen", origin: "Chicago, IL", avatar: "https://randomuser.me/api/portraits/women/44.jpg" }
-    ];
+    const [testimonials, setTestimonials] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [lightboxOpen, setLightboxOpen] = useState(false);
+    const [lightboxIndex, setLightboxIndex] = useState(0);
+
+    useEffect(() => {
+        const fetchTestimonials = async () => {
+            try {
+                setLoading(true);
+                const { data } = await axios.get('http://localhost:5000/api/testimonials');
+                setTestimonials(data);
+            } catch (error) {
+                console.error("Failed to fetch testimonials", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchTestimonials();
+    }, []);
+
+    const imageTestimonials = testimonials.filter(t => t.mediaType === 'image');
+    const lightboxSlides = imageTestimonials.map(t => ({ src: t.content }));
+
+    const openLightbox = (testimonialId) => {
+        const imageIndex = imageTestimonials.findIndex(t => t._id === testimonialId);
+        if (imageIndex > -1) {
+            setLightboxIndex(imageIndex);
+            setLightboxOpen(true);
+        }
+    };
+
+    if (loading || testimonials.length === 0) return null;
 
     return (
-        <section id="testimonials" className="py-24 bg-primary">
-            <div className="container mx-auto">
-                <h2 className="text-4xl md:text-5xl font-bold text-center text-white mb-16 font-serif">{t('testimonials_title')}</h2>
-                <div ref={carouselRef} className="cursor-grab overflow-x-auto">
-                    <motion.div className="flex gap-8 px-4" drag="x" dragConstraints={carouselRef}>
-                        {testimonials.map((testimonial) => (<TestimonialCard key={testimonial.id} testimonial={testimonial} />))}
-                    </motion.div>
+        <section id="testimonials" className="py-32 bg-primary overflow-hidden">
+             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-700 via-primary to-primary"></div>
+            <div className="container mx-auto px-4 relative z-10">
+                <motion.div className="text-center mb-20" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+                    <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-white mb-6 font-serif leading-tight">{t('testimonials_title')}</h2>
+                    <div className="w-24 h-1 bg-gradient-to-r from-gold-base to-gold-shadow mx-auto rounded-full"></div>
+                </motion.div>
+                
+                <div className="relative max-w-7xl mx-auto">
+                    <Swiper
+                        modules={[Navigation, Pagination, A11y]}
+                        spaceBetween={30}
+                        slidesPerView={'auto'}
+                        centeredSlides={true}
+                        loop={testimonials.length > 2}
+                        pagination={{ clickable: true, el: '.swiper-pagination-custom' }}
+                        navigation={{ nextEl: '.swiper-button-next-custom', prevEl: '.swiper-button-prev-custom' }}
+                        className="!pb-16"
+                    >
+                        {testimonials.map((testimonial) => (
+                            <SwiperSlide key={testimonial._id} className="h-auto !w-auto">
+                                <TestimonialCard testimonial={testimonial} onImageClick={() => openLightbox(testimonial._id)} />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+
+                    <div className="swiper-button-prev-custom absolute top-1/2 -left-4 md:-left-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronLeft /></div>
+                    <div className="swiper-button-next-custom absolute top-1/2 -right-4 md:-right-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronRight /></div>
+                    <div className="swiper-pagination-custom text-center mt-8"></div>
                 </div>
             </div>
+
+            <Lightbox
+                open={lightboxOpen}
+                close={() => setLightboxOpen(false)}
+                index={lightboxIndex}
+                slides={lightboxSlides}
+            />
         </section>
     );
 };

@@ -8,15 +8,14 @@ export default {
     extend: {
       colors: {
         'primary': '#0D1B2A',      
-        'secondary': '#8892b0',   
+        'secondary': '#8892b0',  
         'lightest-slate': '#ccd6f6',
         'card-bg': 'rgba(255, 255, 255, 0.05)',
         
-        // פלטת הזהב המדויקת שלך
-        'gold-base': '#D4A574',       // זהב בסיס
-        'gold-shadow': '#B8860B',    // זהב עמוק לצללים
-        'gold-highlight': '#E6C88A', // זהב בהיר להדגשות
-        'gold-dark-details': '#A0522D', // לפרטים כהים
+        'gold-base': '#D4A574',
+        'gold-shadow': '#B8860B',
+        'gold-highlight': '#E6C88A',
+        'gold-dark-details': '#A0522D',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
@@ -24,5 +23,7 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwind-scrollbar-hide') // <-- הוספת התוסף כאן
+  ],
 }

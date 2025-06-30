@@ -1,54 +1,70 @@
-// File: server/server.js
-
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
-require('dotenv').config(); // Load environment variables from .env file
+const dotenv = require('dotenv');
+
+dotenv.config();
+
+const connectDB = require('./config/db.js');
+const User = require('./models/User.js');
+
+// ייבוא כל הראוטים
+const userRoutes = require('./routes/userRoutes.js');
+const uploadRoutes = require('./routes/uploadRoutes.js');
+const galleryRoutes = require('./routes/galleryRoutes.js');
+const testimonialRoutes = require('./routes/testimonialRoutes.js');
+const contactRoutes = require('./routes/contactRoutes.js'); // <-- ייבוא חדש
+
+const { notFound, errorHandler } = require('./middleware/errorMiddleware.js');
 
 const app = express();
+app.use(express.json());
+app.use(cors());
+
+// --- הפעלת כל ה-API Endpoints ---
+app.use('/api/users', userRoutes);
+app.use('/api/upload', uploadRoutes);
+app.use('/api/gallery', galleryRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/contact', contactRoutes); // <-- הפעלת הראוט החדש
+
+app.get('/', (req, res) => {
+  res.send('API for VIP Events is running...');
+});
+
+app.use(notFound);
+app.use(errorHandler);
+
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
-app.use(express.json());
-
-app.post('/api/contact', (req, res) => {
-  const { name, email, phone, message } = req.body;
-
-  // 1. Create a transporter object using Gmail SMTP
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER, // Your Gmail address from .env file
-      pass: process.env.EMAIL_PASS, // Your App Password from .env file
-    },
-  });
-
-  // 2. Define the email options
-  const mailOptions = {
-    from: `"${name}" <${email}>`, // Sender address (shows the user's name and email)
-    to: process.env.EMAIL_USER, // Receiver address (your email, where you'll get the notifications)
-    subject: `New Contact Form Submission from M.L.T VIP`,
-    html: `
-      <h3>New Contact Form Submission</h3>
-      <p><strong>Name:</strong> ${name}</p>
-      <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Phone:</strong> ${phone}</p>
-      <p><strong>Message:</strong></p>
-      <p>${message}</p>
-    `,
-  };
-
-  // 3. Send the email
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email:', error);
-      return res.status(500).json({ message: 'Error sending email' });
+const startServer = async () => {
+    try {
+      await connectDB();
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+      await createInitialAdmin();
+    } catch (error) {
+      console.error('Failed to start server:', error);
     }
-    console.log('Email sent:', info.response);
-    res.status(200).json({ message: 'Email sent successfully!' });
-  });
-});
+};
+  
+const createInitialAdmin = async () => {
+    try {
+        const userExists = await User.findOne({ email: process.env.ADMIN_EMAIL });
+        if (!userExists) {
+            console.log('Initial admin user not found, creating one...');
+            const user = new User({
+                email: process.env.ADMIN_EMAIL,
+                password: process.env.ADMIN_PASSWORD,
+            });
+            await user.save();
+            console.log('Initial admin user has been created successfully!');
+        } else {
+            console.log('Initial admin user already exists.');
+        }
+    } catch (error) {
+        console.error('Error during initial admin user creation:', error);
+    }
+};
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+startServer();
