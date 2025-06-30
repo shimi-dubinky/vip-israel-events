@@ -1,18 +1,22 @@
 const nodemailer = require('nodemailer');
+const twilio = require('twilio');
 
-const submitContactForm = (req, res) => {
-  // קבלת כל השדות, כולל החדשים
+const submitContactForm = async (req, res) => {
   const { name, email, phone, participants, eventType, startDate, endDate, message } = req.body;
 
+  // =========== התיקון נמצא כאן ===========
+  // במקום להשתמש בקיצור הדרך 'gmail', נגדיר את כל הפרטים במפורש
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: "smtp.gmail.com", // השרת של ג'ימייל
+    port: 587, // הפורט המומלץ לשליחה מאובטחת
+    secure: false, // ההצפנה מתחילה באמצעות STARTTLS
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
   });
+  // =======================================
 
-  // בניית גוף האימייל עם כל הפרטים החדשים
   const mailOptions = {
     from: `"${name}" <${email}>`,
     to: process.env.EMAIL_USER,
@@ -34,14 +38,30 @@ const submitContactForm = (req, res) => {
       </div>
     `,
   };
+  
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Email sent successfully');
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.error('Error sending email:', error);
-      return res.status(500).json({ message: 'Error sending email' });
+    try {
+      const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+      const whatsappMessageBody = `*פנייה חדשה מאתר VIP Events*\n\n*שם:* ${name}\n*אימייל:* ${email}\n*טלפון:* ${phone || 'לא צוין'}\n*סוג אירוע:* ${eventType || 'לא צוין'}\n*משתתפים:* ${participants || 'לא צוין'}\n*תאריכים:* מ-${startDate || '?'} עד-${endDate || '?'}\n\n*הודעה:* ${message}`;
+      await client.messages.create({
+         from: process.env.TWILIO_WHATSAPP_NUMBER,
+         body: whatsappMessageBody.trim(),
+         to: process.env.RECIPIENT_WHATSAPP_NUMBER
+       });
+       console.log('WhatsApp notification sent successfully');
+    } catch (whatsappError) {
+      console.error('Failed to send WhatsApp notification:', whatsappError);
     }
-    res.status(200).json({ message: 'Email sent successfully!' });
-  });
+
+    res.status(200).json({ message: 'Contact form submitted successfully!' });
+
+  } catch (emailError) {
+    console.error('Error sending email:', emailError);
+    return res.status(500).json({ message: 'Error sending email' });
+  }
 };
 
 module.exports = { submitContactForm };
