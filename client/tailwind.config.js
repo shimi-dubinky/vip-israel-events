@@ -24,6 +24,6 @@ export default {
     },
   },
   plugins: [
-    require('tailwind-scrollbar-hide') // <-- הוספת התוסף כאן
+    require('tailwind-scrollbar-hide') 
   ],
 }

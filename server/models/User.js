@@ -27,15 +27,12 @@ userSchema.pre('save', async function (next) {
   this.password = await bcrypt.hash(this.password, salt);
 });
 
-// ==============================================================
-// === כאן נמצאת הפונקציה שהייתה חסרה או שגויה בקוד שלך ===
-// ==============================================================
-// הוספת פונקציה בשם matchPassword לסכמה של המשתמש
+
 userSchema.methods.matchPassword = async function (enteredPassword) {
   // השוואה בין הסיסמה שהוזנה לסיסמה המוצפנת ב-DB
   return await bcrypt.compare(enteredPassword, this.password);
 };
-// ==============================================================
+
 
 const User = mongoose.model('User', userSchema);
 

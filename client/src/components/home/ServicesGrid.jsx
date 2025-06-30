@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link } from 'react-router-dom';
-import { CATEGORIES } from '../../data/categories'; // ייבוא של מקור האמת
+import { CATEGORIES } from '../../data/categories'; 
 import cardBgImage from '../../assets/images/image1.jpg';
 
 export const ServicesGrid = () => {
@@ -17,7 +17,6 @@ export const ServicesGrid = () => {
                     viewport={{ once: true }} 
                     transition={{ duration: 0.8 }}
                 >
-                    {/* שימוש במפתח הנכון שקיים בקבצי התרגום שלך */}
                     {t('events_title')} 
                 </motion.h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">

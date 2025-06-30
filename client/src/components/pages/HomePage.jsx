@@ -1,4 +1,3 @@
-// src/components/pages/HomePage.jsx
 import { PremiumHero } from "../home/PremiumHero";
 import { ServicesGrid } from "../home/ServicesGrid";
 import { WhyUsSection } from "../home/WhyUsSection";

@@ -3,20 +3,16 @@ const twilio = require('twilio');
 
 const submitContactForm = async (req, res) => {
   const { name, email, phone, participants, eventType, startDate, endDate, message } = req.body;
-
-  // =========== התיקון נמצא כאן ===========
-  // במקום להשתמש בקיצור הדרך 'gmail', נגדיר את כל הפרטים במפורש
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com", // השרת של ג'ימייל
-    port: 587, // הפורט המומלץ לשליחה מאובטחת
-    secure: false, // ההצפנה מתחילה באמצעות STARTTLS
+    host: "smtp.gmail.com", 
+    port: 587, 
+    secure: false, 
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
     },
   });
-  // =======================================
-
+  
   const mailOptions = {
     from: `"${name}" <${email}>`,
     to: process.env.EMAIL_USER,

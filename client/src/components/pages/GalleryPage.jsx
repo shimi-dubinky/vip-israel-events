@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { useLocation } from 'react-router-dom';
 import { CATEGORIES } from '../../data/categories';
 
@@ -23,7 +23,7 @@ const GalleryPage = () => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('http://localhost:5000/api/gallery');
+        const { data } = await axios.get('/gallery');
         setGalleryItems(data);
         setError('');
       } catch (error) {

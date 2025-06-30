@@ -1,5 +1,4 @@
 const GalleryItem = require('../models/GalleryItem.js');
-// נייבא את אובייקט cloudinary כדי שנוכל להשתמש ב-API שלו למחיקה
 const { cloudinary } = require('../config/cloudinary.js');
 
 /**
@@ -41,17 +40,11 @@ const getGalleryItems = async (req, res) => {
  */
 const deleteGalleryItem = async (req, res) => {
   try {
-    // 1. מצא את הפריט ב-DB לפי המזהה שהתקבל בכתובת
     const itemToDelete = await GalleryItem.findById(req.params.id);
 
     if (itemToDelete) {
-      // 2. אם הפריט קיים, השתמש ב-public_id שלו כדי למחוק את הקובץ מ-Cloudinary
-      // 'destroy' היא פקודת המחיקה ב-API של Cloudinary
-      await cloudinary.uploader.destroy(itemToDelete.public_id);
-      
-      // 3. לאחר שהקובץ נמחק מהענן, מחק את הרשומה מבסיס הנתונים
-      await GalleryItem.deleteOne({ _id: req.params.id });
-      
+      await cloudinary.uploader.destroy(itemToDelete.public_id);      
+      await GalleryItem.deleteOne({ _id: req.params.id });    
       res.json({ message: 'Gallery item removed' });
     } else {
       res.status(404).json({ message: 'Gallery item not found' });
@@ -65,5 +58,5 @@ const deleteGalleryItem = async (req, res) => {
 module.exports = {
   createGalleryItem,
   getGalleryItems,
-  deleteGalleryItem, // <-- הוספת הפונקציה החדשה לייצוא
+  deleteGalleryItem, 
 };

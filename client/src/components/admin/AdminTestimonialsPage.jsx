@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { Link } from 'react-router-dom';
 
 const AdminTestimonialsPage = () => {
@@ -7,7 +7,7 @@ const AdminTestimonialsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // State for the "Add New" form
+  
   const [formState, setFormState] = useState({
     author: '',
     origin: '',
@@ -25,7 +25,7 @@ const AdminTestimonialsPage = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('http://localhost:5000/api/testimonials');
+      const { data } = await axios.get('/testimonials');
       setTestimonials(data);
       setLoading(false);
     } catch (err) {
@@ -62,7 +62,7 @@ const AdminTestimonialsPage = () => {
     formData.append('file', file);
     const uploadConfig = { headers: { 'Content-Type': 'multipart/form-data' } };
     const { data } = await axios.post('http://localhost:5000/api/upload', formData, uploadConfig);
-    return data; // returns { url, public_id }
+    return data; 
   };
 
   const submitHandler = async (e) => {
@@ -125,7 +125,7 @@ const AdminTestimonialsPage = () => {
         <Link to="/admin/dashboard" className="text-gold-base hover:text-gold-highlight mb-4 inline-block">&rarr; חזרה ללוח הבקרה</Link>
         <h1 className="text-3xl font-bold text-gold-highlight mb-6">ניהול ממליצים</h1>
 
-        {/* Add New Testimonial Form */}
+    
         <div className="bg-slate-800 p-6 rounded-lg mb-8">
             <h2 className="text-2xl font-semibold text-gold-base mb-4">הוספת המלצה חדשה</h2>
             <form onSubmit={submitHandler} className="space-y-4">

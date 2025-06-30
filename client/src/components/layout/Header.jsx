@@ -1,4 +1,3 @@
-// src/components/layout/Header.jsx
 import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link as ScrollLink } from 'react-scroll';

@@ -1,4 +1,3 @@
-// src/components/layout/Footer.jsx
 import { useTranslation } from 'react-i18next';
 
 const Footer = () => {

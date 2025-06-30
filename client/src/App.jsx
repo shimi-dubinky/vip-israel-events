@@ -7,7 +7,6 @@ import AdminLoginPage from './components/pages/AdminLoginPage';
 import AdminDashboardPage from './components/pages/AdminDashboardPage';
 import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 import AdminGalleryPage from './components/admin/AdminGalleryPage';
-// ייבוא הקומפוננטה החדשה
 import AdminTestimonialsPage from './components/admin/AdminTestimonialsPage';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';

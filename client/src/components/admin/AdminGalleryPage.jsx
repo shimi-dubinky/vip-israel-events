@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
+import axios from '../../api/axios';
 import { Link } from 'react-router-dom';
-import { CATEGORIES } from '../../data/categories'; // ייבוא מקור האמת
+import { CATEGORIES } from '../../data/categories'; 
 import { useTranslation } from 'react-i18next';
 
 const categoryColorMap = {
@@ -31,7 +31,7 @@ const AdminGalleryPage = () => {
   const fetchGalleryItems = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('http://localhost:5000/api/gallery');
+      const { data } = await axios.get('/gallery');
       setItems(data);
       setLoading(false);
     } catch (err) {
@@ -64,11 +64,9 @@ const AdminGalleryPage = () => {
     formData.append('file', file);
     try {
       const uploadConfig = { headers: { 'Content-Type': 'multipart/form-data' } };
-      // ======================= התיקון הגדול =======================
-      // השתמשנו ב-formData במקום במשתנה שלא היה קיים
+      
       const { data: uploadData } = await axios.post('http://localhost:5000/api/upload', formData, uploadConfig);
-      // ==========================================================
-
+      
       const { url, public_id } = uploadData;
       const mediaType = file.type.startsWith('video') ? 'video' : 'image';
       const finalTitle = title.trim() === '' ? file.name : title;

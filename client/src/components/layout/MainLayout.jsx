@@ -1,6 +1,6 @@
-// src/components/layout/MainLayout.jsx
-import { Header } from './Header'; // Changed to named import
+import { Header } from './Header';
 import Footer from './Footer';
+import FloatingWhatsApp from './FloatingWhatsApp'; 
 
 const MainLayout = ({ children }) => {
   return (
@@ -10,6 +10,7 @@ const MainLayout = ({ children }) => {
         {children}
       </main>
       <Footer />
+      <FloatingWhatsApp /> 
     </div>
   );
 };

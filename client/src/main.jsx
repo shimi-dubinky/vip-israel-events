@@ -6,7 +6,7 @@ import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import './i18n';
 import 'react-datepicker/dist/react-datepicker.css';
-import "yet-another-react-lightbox/styles.css"; // <-- הוספת שורת ה-CSS החדשה
+import "yet-another-react-lightbox/styles.css"; 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

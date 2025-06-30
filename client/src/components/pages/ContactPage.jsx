@@ -1,14 +1,12 @@
-// src/components/pages/ContactPage.jsx
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
-import DatePicker from 'react-datepicker'; // ייבוא של רכיב לוח השנה
+import axios from '../../api/axios';
+import DatePicker from 'react-datepicker'; 
 
 const ContactPage = () => {
   const { t } = useTranslation();
   
-  // הרחבת ה-state עם השדות החדשים
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,14 +16,12 @@ const ContactPage = () => {
     message: '',
   });
   
-  // State נפרד לתאריכים
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
-  // רשימת האירועים לבחירה
   const eventTypes = [
     'בר/בת מצווה',
     'גיבוש קהילה',
@@ -47,17 +43,15 @@ const ContactPage = () => {
     setIsSubmitting(true);
     setSubmitMessage('');
 
-    // איחוד כל נתוני הטופס לאובייקט אחד לפני השליחה
     const finalFormData = {
         ...formData,
-        startDate: startDate ? startDate.toISOString().split('T')[0] : '', // פורמט תאריך YYYY-MM-DD
+        startDate: startDate ? startDate.toISOString().split('T')[0] : '', 
         endDate: endDate ? endDate.toISOString().split('T')[0] : '',
     };
 
     try {
-      const response = await axios.post('http://localhost:5000/api/contact', finalFormData);
+      const response = await axios.post('/contact', finalFormData);
       setSubmitMessage(t('contact_success_message', { name: formData.name }));
-      // איפוס הטופס
       setFormData({ name: '', email: '', phone: '', participants: '', eventType: '', message: '' });
       setStartDate(null);
       setEndDate(null);
@@ -101,7 +95,6 @@ const ContactPage = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.6 }}
         >
-          {/* שדות שם ואימייל */}
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-lightest-slate mb-1">{t('form_name')}*</label>
@@ -113,7 +106,6 @@ const ContactPage = () => {
             </div>
           </div>
           
-          {/* שדות טלפון וכמות משתתפים */}
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-lightest-slate mb-1">{t('form_phone')}</label>
@@ -125,7 +117,6 @@ const ContactPage = () => {
             </div>
           </div>
 
-          {/* שדות תאריכים */}
           <div>
              <label className="block text-sm font-medium text-lightest-slate mb-1">תאריכי טיול (מ- עד)</label>
              <div className="grid md:grid-cols-2 gap-6">
@@ -153,7 +144,6 @@ const ContactPage = () => {
              </div>
           </div>
 
-          {/* בחירת סוג אירוע */}
           <div>
             <label className="block text-sm font-medium text-lightest-slate mb-2">סוג האירוע*</label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -177,7 +167,6 @@ const ContactPage = () => {
             </div>
           </div>
 
-          {/* שדה הודעה */}
           <div>
             <label htmlFor="message" className="block text-sm font-medium text-lightest-slate mb-1">{t('form_message')}*</label>
             <textarea id="message" name="message" value={formData.message} onChange={handleChange} rows="5" className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" required></textarea>

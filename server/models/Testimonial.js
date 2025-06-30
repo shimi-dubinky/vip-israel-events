@@ -22,7 +22,7 @@ const testimonialSchema = mongoose.Schema(
       type: String,
       required: [true, 'Please provide a thumbnail image URL'],
     },
-    // ---- שדות לניהול קבצים בענן ----
+   
     content_public_id: { // מזהה של קובץ התוכן (אם הוא תמונה/וידאו)
       type: String,
     },

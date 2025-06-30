@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import axios from 'axios';
+import axios from '../../api/axios';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
@@ -48,7 +48,6 @@ const TestimonialCard = ({ testimonial, onImageClick }) => {
           )}
           {isMediaCard && (
             <div className="w-full h-full rounded-2xl overflow-hidden">
-                {/* שימוש ב-object-cover כדי שהתמונה תמיד תמלא את הריבוע */}
               {testimonial.mediaType === 'image' && <img src={testimonial.content} alt={`Testimonial from ${testimonial.author}`} className="w-full h-full object-cover shadow-2xl" />}
               {testimonial.mediaType === 'video' && <video src={testimonial.content} className="w-full h-full object-cover shadow-2xl" controls onClick={(e) => e.stopPropagation()} />}
             </div>
@@ -82,7 +81,7 @@ export const TestimonialsCarousel = () => {
         const fetchTestimonials = async () => {
             try {
                 setLoading(true);
-                const { data } = await axios.get('http://localhost:5000/api/testimonials');
+                const { data } = await axios.get('/testimonials');
                 setTestimonials(data);
             } catch (error) {
                 console.error("Failed to fetch testimonials", error);
