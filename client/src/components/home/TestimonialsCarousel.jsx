@@ -1,31 +1,22 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import axios from '../../api/axios';
+import axios from 'axios';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
-import Lightbox from "yet-another-react-lightbox";
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-const TestimonialCard = ({ testimonial, onImageClick }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+// רכיב הכרטיס עם גודל ריבועי ואחיד
+const TestimonialCard = ({ testimonial }) => {
   const isMediaCard = testimonial.mediaType === 'image' || testimonial.mediaType === 'video';
-  const isLongText = testimonial.mediaType === 'quote' && testimonial.content.length > 150;
-
-  const handleCardClick = () => {
-    if (testimonial.mediaType === 'image') {
-      onImageClick();
-    }
-  };
-
+  
   return (
     <motion.div 
-      className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group ${isMediaCard ? 'cursor-pointer' : ''}`}
-      onClick={handleCardClick}
+      className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group"
       whileHover={{ 
         boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)",
         borderColor: "rgba(59, 130, 246, 0.3)"
@@ -33,23 +24,18 @@ const TestimonialCard = ({ testimonial, onImageClick }) => {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
       <div className="relative h-full flex flex-col justify-between z-10">
-        <div className="flex-grow flex items-center justify-center text-center overflow-auto scrollbar-hide p-1">
+        <div className="flex-grow flex items-center justify-center text-center overflow-hidden p-1">
           {testimonial.mediaType === 'quote' && (
             <div className="relative">
-              <p className={`font-light text-xl leading-8 text-slate-200 transition-all duration-500 ${isLongText && !isExpanded ? 'line-clamp-6' : ''}`}>
+              <p className="font-light text-xl leading-8 text-slate-200 line-clamp-6">
                 "{testimonial.content}"
               </p>
-              {isLongText && (
-                <button onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }} className="text-gold-base hover:text-gold-highlight font-semibold mt-2">
-                  {isExpanded ? 'הצג פחות' : 'קרא עוד...'}
-                </button>
-              )}
             </div>
           )}
           {isMediaCard && (
             <div className="w-full h-full rounded-2xl overflow-hidden">
-              {testimonial.mediaType === 'image' && <img src={testimonial.content} alt={`Testimonial from ${testimonial.author}`} className="w-full h-full object-cover shadow-2xl" />}
-              {testimonial.mediaType === 'video' && <video src={testimonial.content} className="w-full h-full object-cover shadow-2xl" controls onClick={(e) => e.stopPropagation()} />}
+              {testimonial.mediaType === 'image' && <img src={testimonial.content} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />}
+              {testimonial.mediaType === 'video' && <video src={testimonial.content} className="w-full h-full object-cover shadow-2xl" controls />}
             </div>
           )}
         </div>
@@ -74,14 +60,12 @@ export const TestimonialsCarousel = () => {
     const { t } = useTranslation();
     const [testimonials, setTestimonials] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [lightboxOpen, setLightboxOpen] = useState(false);
-    const [lightboxIndex, setLightboxIndex] = useState(0);
 
     useEffect(() => {
         const fetchTestimonials = async () => {
             try {
                 setLoading(true);
-                const { data } = await axios.get('/testimonials');
+                const { data } = await axios.get('https://vip-israel-server.onrender.com/api/testimonials');
                 setTestimonials(data);
             } catch (error) {
                 console.error("Failed to fetch testimonials", error);
@@ -92,18 +76,10 @@ export const TestimonialsCarousel = () => {
         fetchTestimonials();
     }, []);
 
-    const imageTestimonials = testimonials.filter(t => t.mediaType === 'image');
-    const lightboxSlides = imageTestimonials.map(t => ({ src: t.content }));
-
-    const openLightbox = (testimonialId) => {
-        const imageIndex = imageTestimonials.findIndex(t => t._id === testimonialId);
-        if (imageIndex > -1) {
-            setLightboxIndex(imageIndex);
-            setLightboxOpen(true);
-        }
-    };
-
-    if (loading || testimonials.length === 0) return null;
+    if (loading) {
+        return ( <section id="testimonials" className="py-32 bg-primary"><div className="container mx-auto px-4"><div className="flex justify-center items-center min-h-[400px]"><div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gold-base"></div></div></div></section> );
+    }
+    if (testimonials.length === 0) return null;
 
     return (
         <section id="testimonials" className="py-32 bg-primary overflow-hidden">
@@ -127,23 +103,15 @@ export const TestimonialsCarousel = () => {
                     >
                         {testimonials.map((testimonial) => (
                             <SwiperSlide key={testimonial._id} className="h-auto !w-auto">
-                                <TestimonialCard testimonial={testimonial} onImageClick={() => openLightbox(testimonial._id)} />
+                                <TestimonialCard testimonial={testimonial} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
-
                     <div className="swiper-button-prev-custom absolute top-1/2 -left-4 md:-left-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronLeft /></div>
                     <div className="swiper-button-next-custom absolute top-1/2 -right-4 md:-right-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronRight /></div>
                     <div className="swiper-pagination-custom text-center mt-8"></div>
                 </div>
             </div>
-
-            <Lightbox
-                open={lightboxOpen}
-                close={() => setLightboxOpen(false)}
-                index={lightboxIndex}
-                slides={lightboxSlides}
-            />
         </section>
     );
 };
