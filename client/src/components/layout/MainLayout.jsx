@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'; // 1. ייבוא קריטי
+import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import Footer from './Footer';
 import FloatingWhatsApp from './FloatingWhatsApp';
@@ -8,8 +8,6 @@ const MainLayout = () => {
     <div className="min-h-screen flex flex-col bg-primary">
       <Header />
       <main className="flex-grow">
-        {/* 2. החלפת {children} ב-Outlet */}
-        {/* זה אומר לראוטר "כאן תצייר את העמודים הפנימיים" */}
         <Outlet />
       </main>
       <Footer />

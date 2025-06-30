@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
-import axios from '../../api/axios';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { CATEGORIES } from '../../data/categories'; 
+import { CATEGORIES } from '../../data/categories';
 import { useTranslation } from 'react-i18next';
 
 const categoryColorMap = {
@@ -16,13 +16,11 @@ const AdminGalleryPage = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState(CATEGORIES[0].key);
   const [file, setFile] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [formError, setFormError] = useState('');
-  
   const [adminFilter, setAdminFilter] = useState('all');
 
   const userInfo = JSON.parse(localStorage.getItem('userInfo'));
@@ -31,7 +29,7 @@ const AdminGalleryPage = () => {
   const fetchGalleryItems = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('/gallery');
+      const { data } = await axios.get('https://vip-israel-server.onrender.com/api/gallery');
       setItems(data);
       setLoading(false);
     } catch (err) {
@@ -45,7 +43,7 @@ const AdminGalleryPage = () => {
   const deleteHandler = async (id) => {
     if (window.confirm('האם אתה בטוח שברצונך למחוק פריט זה?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/gallery/${id}`, config);
+        await axios.delete(`https://vip-israel-server.onrender.com/api/gallery/${id}`, config);
         fetchGalleryItems();
       } catch (err) {
         setError('לא ניתן היה למחוק את הפריט.');
@@ -64,15 +62,11 @@ const AdminGalleryPage = () => {
     formData.append('file', file);
     try {
       const uploadConfig = { headers: { 'Content-Type': 'multipart/form-data' } };
-      
-      const { data: uploadData } = await axios.post('http://localhost:5000/api/upload', formData, uploadConfig);
-      
+      const { data: uploadData } = await axios.post('https://vip-israel-server.onrender.com/api/upload', formData, uploadConfig);
       const { url, public_id } = uploadData;
       const mediaType = file.type.startsWith('video') ? 'video' : 'image';
       const finalTitle = title.trim() === '' ? file.name : title;
-      
-      await axios.post('http://localhost:5000/api/gallery', { title: finalTitle, category, mediaType, mediaUrl: url, public_id, }, config);
-      
+      await axios.post('https://vip-israel-server.onrender.com/api/gallery', { title: finalTitle, category, mediaType, mediaUrl: url, public_id, }, config);
       setUploading(false);
       setTitle('');
       setCategory(CATEGORIES[0].key);
@@ -86,7 +80,6 @@ const AdminGalleryPage = () => {
   };
 
   const filteredItems = useMemo(() => {
-    // מיון לפי תאריך יצירה (החדש ביותר ראשון)
     const sortedItems = [...items].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     if (adminFilter === 'all') return sortedItems;
     return sortedItems.filter(item => item.category === adminFilter);
@@ -97,7 +90,6 @@ const AdminGalleryPage = () => {
       <div className="max-w-7xl mx-auto">
         <Link to="/admin/dashboard" className="text-gold-base hover:text-gold-highlight mb-4 inline-block">&rarr; חזרה ללוח הבקרה</Link>
         <h1 className="text-3xl font-bold text-gold-highlight mb-6">ניהול גלריה</h1>
-        
         <div className="bg-slate-800 p-6 rounded-lg mb-8">
             <h2 className="text-2xl font-semibold text-gold-base mb-4">הוספת פריט חדש</h2>
             <form onSubmit={submitHandler}>
@@ -112,7 +104,6 @@ const AdminGalleryPage = () => {
                 {formError && <p className="text-red-500 mt-2">{formError}</p>}
             </form>
         </div>
-        
         <div className="mb-4">
             <h3 className="text-xl text-gold-base mb-2">סינון תצוגה:</h3>
             <div className="flex flex-wrap gap-2">
@@ -120,7 +111,6 @@ const AdminGalleryPage = () => {
                 {CATEGORIES.map(cat => ( <button key={cat.key} onClick={() => setAdminFilter(cat.key)} className={`px-4 py-1 text-sm rounded-full ${adminFilter === cat.key ? 'bg-gold-base text-primary' : 'bg-slate-700'}`}>{t(cat.titleKey)}</button>))}
             </div>
         </div>
-
         {loading ? <p>טוען...</p> : error ? <p className="text-red-500">{error}</p> : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredItems.map(item => (
@@ -141,5 +131,4 @@ const AdminGalleryPage = () => {
     </div>
   );
 };
-
 export default AdminGalleryPage;

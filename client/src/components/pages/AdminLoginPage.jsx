@@ -28,7 +28,7 @@ const AdminLoginPage = () => {
         },
       };
       const { data } = await axios.post(
-        'http://localhost:5000/api/users/login',
+       'https://vip-israel-server.onrender.com/api/users/login',
         { email, password },
         config
       );
