@@ -20,7 +20,6 @@ const ServiceCard = ({ category, index }) => {
   const { t } = useTranslation();
   
   return (
-    // תיקון א': ה-Link עוטף את כל הרכיב והופך את כולו ללחיץ
     <Link 
       to="/gallery" 
       state={{ filter: category.key }}
@@ -32,11 +31,11 @@ const ServiceCard = ({ category, index }) => {
         viewport={{ once: true }}
         transition={{ duration: 0.7, delay: index * 0.1 }}
       >
-        {/* תיקון ב': שינוי האטימות של התמונה ל-20% כברירת מחדל */}
-        <img src={categoryImages[category.key]} alt={t(category.titleKey)} className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110 opacity-20 group-hover:opacity-30" />
+        
+        {/* שינינו את ערכי ה-opacity מ-20 ל-25, ומ-30 ל-40 במעבר עכבר */}
+        <img src={categoryImages[category.key]} alt={t(category.titleKey)} className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110 opacity-25 group-hover:opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
         
-        {/* תיקון ג': הוספת text-center ו-md:text-start ליישור נכון */}
         <div className="relative h-full flex flex-col justify-end p-6 md:p-8 text-center md:text-start">
           <h3 className="text-2xl md:text-3xl font-bold text-white font-serif">{t(category.titleKey)}</h3>
           <p className="mt-2 text-white/80 text-sm leading-relaxed line-clamp-3">{t(category.descriptionKey)}</p>

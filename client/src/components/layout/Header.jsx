@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
-import { Link as ScrollLink } from 'react-scroll';
+import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
+import { Link as ScrollLink, scroller } from 'react-scroll';
 import { useTranslation } from 'react-i18next';
 
 export const Header = () => {
@@ -8,12 +8,12 @@ export const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
 
+  // Hooks חדשים לניווט חכם
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const changeBackground = () => {
-    if (window.scrollY >= 80) {
-      setHasScrolled(true);
-    } else {
-      setHasScrolled(false);
-    }
+    window.scrollY >= 80 ? setHasScrolled(true) : setHasScrolled(false);
   };
 
   useEffect(() => {
@@ -28,19 +28,47 @@ export const Header = () => {
     { name: t('nav_gallery'), href: '/gallery', isPage: true },
     { name: t('nav_contact'), href: '/contact', isPage: true },
   ];
+  
+  // פונקציית ניווט חכמה חדשה
+  const handleSmartScroll = (targetId) => {
+    setIsMenuOpen(false); // סגור את התפריט הנייד בכל מקרה
+    
+    // אם אנחנו לא בדף הבית
+    if (location.pathname !== '/') {
+      navigate('/'); // נווט לדף הבית
+      // המתן רגע קצר כדי שהדף יטען, ואז גלול
+      setTimeout(() => {
+        scroller.scrollTo(targetId, {
+          duration: 800,
+          smooth: 'easeInOutCubic',
+          offset: -80,
+        });
+      }, 100);
+    } else {
+      // אם אנחנו כבר בדף הבית, פשוט גלול
+      scroller.scrollTo(targetId, {
+        duration: 800,
+        smooth: 'easeInOutCubic',
+        offset: -80,
+      });
+    }
+  };
 
-  const NavLink = ({ href, children, isPage, onClick }) => {
+  const NavLink = ({ link }) => {
     const baseTextColor = hasScrolled ? 'text-secondary' : 'text-lightest-slate';
     const hoverColor = 'hover:text-gold-base';
     const className = `${baseTextColor} font-medium ${hoverColor} transition-colors cursor-pointer`;
 
-    if (isPage) {
-      return <RouterLink to={href} className={className} onClick={onClick}>{children}</RouterLink>;
+    // קישור רגיל לעמוד אחר
+    if (link.isPage) {
+      return <RouterLink to={link.href} className={className} onClick={() => setIsMenuOpen(false)}>{link.name}</RouterLink>;
     }
+    
+    // קישור גלילה חכם
     return (
-      <ScrollLink to={href} spy={true} smooth={true} offset={-80} duration={800} className={className} onClick={onClick}>
-        {children}
-      </ScrollLink>
+      <a onClick={() => handleSmartScroll(link.href)} className={className}>
+        {link.name}
+      </a>
     );
   };
 
@@ -55,7 +83,7 @@ export const Header = () => {
         <div className="hidden md:flex items-center">
           <div className="flex gap-x-8">
             {navLinks.map((link) => (
-              <NavLink key={link.name} href={link.href} isPage={link.isPage}>{link.name}</NavLink>
+              <NavLink key={link.name} link={link} />
             ))}
           </div>
           <div className='flex items-center border-s border-white/20 ms-8 ps-8 space-x-2'>
@@ -79,9 +107,7 @@ export const Header = () => {
           </div>
           <div className="flex flex-col items-center justify-center flex-grow space-y-10">
             {navLinks.map((link) => (
-              <NavLink key={link.name} href={link.href} isPage={link.isPage} onClick={() => setIsMenuOpen(false)}>
-                  <span className='text-3xl !text-lightest-slate font-serif'>{link.name}</span>
-              </NavLink>
+              <NavLink key={link.name} link={link} />
             ))}
             <div className='flex items-center pt-8 mt-8 border-t border-white/20 space-x-4'>
               <button onClick={() => {i18n.changeLanguage('en'); setIsMenuOpen(false);}} className={`text-xl font-medium transition-colors ${i18n.language.startsWith('en') ? 'text-gold-base' : 'text-white'}`}>EN</button>
