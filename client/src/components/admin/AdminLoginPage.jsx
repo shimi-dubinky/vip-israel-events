@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from '../../api/axios'; 
+import axios from 'axios'; 
 
 const AdminLoginPage = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ const AdminLoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      const { data } = await axios.post('/users/login', { email, password });
+      const { data } = await axios.post( `${import.meta.env.VITE_API_URL}/api/users/login`, { email, password });
       localStorage.setItem('userInfo', JSON.stringify(data));
       setLoading(false);
       navigate('/admin/dashboard');

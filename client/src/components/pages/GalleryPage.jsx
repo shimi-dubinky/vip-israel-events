@@ -23,7 +23,7 @@ const GalleryPage = () => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('https://vip-israel-server.onrender.com/api/gallery');
+        const { data } = await axios.get('/gallery');
         setGalleryItems(data);
         setError('');
       } catch (error) {

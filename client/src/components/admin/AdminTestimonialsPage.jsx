@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from '../../api/axios';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 const AdminTestimonialsPage = () => {
@@ -7,14 +7,13 @@ const AdminTestimonialsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  
   const [formState, setFormState] = useState({
     author: '',
     origin: '',
-    mediaType: 'quote', // 'quote', 'image', or 'video'
-    content: '', // For quote text
-    thumbnailFile: null, // For author's picture
-    contentFile: null, // For image or video testimonial
+    mediaType: 'quote',
+    content: '',
+    thumbnailFile: null,
+    contentFile: null,
   });
   const [uploading, setUploading] = useState(false);
   const [formError, setFormError] = useState('');
@@ -25,7 +24,7 @@ const AdminTestimonialsPage = () => {
   const fetchTestimonials = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('/testimonials');
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/testimonials`);
       setTestimonials(data);
       setLoading(false);
     } catch (err) {
@@ -41,7 +40,7 @@ const AdminTestimonialsPage = () => {
   const deleteHandler = async (id) => {
     if (window.confirm('האם אתה בטוח שברצונך למחוק המלצה זו?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/testimonials/${id}`, config);
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/testimonials/${id}`, config);
         fetchTestimonials();
       } catch (err) {
         setError('לא ניתן היה למחוק את ההמלצה.');
@@ -61,7 +60,7 @@ const AdminTestimonialsPage = () => {
     const formData = new FormData();
     formData.append('file', file);
     const uploadConfig = { headers: { 'Content-Type': 'multipart/form-data' } };
-    const { data } = await axios.post('http://localhost:5000/api/upload', formData, uploadConfig);
+    const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/upload`, formData, uploadConfig);
     return data; 
   };
 
@@ -75,22 +74,19 @@ const AdminTestimonialsPage = () => {
         throw new Error('יש להעלות תמונת פרופיל (תמונה ממוזערת).');
       }
 
-      // 1. Upload thumbnail
       const thumbnailData = await uploadFileHandler(formState.thumbnailFile);
       
       let contentData = { url: null, public_id: null };
       let testimonialContent = formState.content;
 
-      // 2. Upload content file if it's an image or video testimonial
       if (formState.mediaType === 'image' || formState.mediaType === 'video') {
         if (!formState.contentFile) {
           throw new Error('עבור המלצת תמונה או וידאו, יש לבחור קובץ תוכן.');
         }
         contentData = await uploadFileHandler(formState.contentFile);
-        testimonialContent = contentData.url; // The content is the URL to the media
+        testimonialContent = contentData.url;
       }
       
-      // 3. Create the testimonial in the database
       const testimonialPayload = {
         author: formState.author,
         origin: formState.origin,
@@ -101,9 +97,8 @@ const AdminTestimonialsPage = () => {
         content_public_id: contentData.public_id,
       };
 
-      await axios.post('http://localhost:5000/api/testimonials', testimonialPayload, config);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/testimonials`, testimonialPayload, config);
       
-      // Reset form and refresh list
       setUploading(false);
       setFormState({ author: '', origin: '', mediaType: 'quote', content: '', thumbnailFile: null, contentFile: null });
       document.getElementById('thumbnailFile-input').value = null;
@@ -113,11 +108,11 @@ const AdminTestimonialsPage = () => {
       fetchTestimonials();
 
     } catch (err) {
-      setFormError(err.message || 'משהו השתבש. לא ניתן היה להוסיף המלצה.');
+      const errorMessage = err.response?.data?.message || err.message || 'משהו השתבש. לא ניתן היה להוסיף המלצה.';
+      setFormError(errorMessage);
       setUploading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen bg-primary text-lightest-slate p-8" dir="rtl">
@@ -125,7 +120,6 @@ const AdminTestimonialsPage = () => {
         <Link to="/admin/dashboard" className="text-gold-base hover:text-gold-highlight mb-4 inline-block">&rarr; חזרה ללוח הבקרה</Link>
         <h1 className="text-3xl font-bold text-gold-highlight mb-6">ניהול ממליצים</h1>
 
-    
         <div className="bg-slate-800 p-6 rounded-lg mb-8">
             <h2 className="text-2xl font-semibold text-gold-base mb-4">הוספת המלצה חדשה</h2>
             <form onSubmit={submitHandler} className="space-y-4">
@@ -133,7 +127,6 @@ const AdminTestimonialsPage = () => {
                     <input type="text" name="author" placeholder="שם הממליץ" value={formState.author} onChange={handleFormChange} required className="bg-slate-700 p-2 rounded w-full" />
                     <input type="text" name="origin" placeholder="חברה / מקור (אופציונלי)" value={formState.origin} onChange={handleFormChange} className="bg-slate-700 p-2 rounded w-full" />
                 </div>
-
                 <div>
                     <label className="block text-sm font-bold mb-1">סוג ההמלצה</label>
                     <select name="mediaType" value={formState.mediaType} onChange={handleFormChange} className="bg-slate-700 p-2 rounded w-full">
@@ -142,11 +135,9 @@ const AdminTestimonialsPage = () => {
                         <option value="video">וידאו</option>
                     </select>
                 </div>
-
                 {formState.mediaType === 'quote' && (
                     <textarea name="content" placeholder="תוכן ההמלצה..." value={formState.content} onChange={handleFormChange} required rows="4" className="bg-slate-700 p-2 rounded w-full"></textarea>
                 )}
-
                 <div className="grid md:grid-cols-2 gap-4">
                     <div>
                         <label className="block text-sm font-bold mb-1">תמונת פרופיל (Thumbnail)*</label>
@@ -159,7 +150,6 @@ const AdminTestimonialsPage = () => {
                         </div>
                     )}
                 </div>
-
                 <button type="submit" disabled={uploading} className="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded disabled:bg-gray-500">
                     {uploading ? 'מעלה קבצים...' : 'הוסף המלצה'}
                 </button>
@@ -167,7 +157,6 @@ const AdminTestimonialsPage = () => {
             </form>
         </div>
 
-        {/* Existing Testimonials List */}
         {loading ? <p>טוען...</p> : error ? <p className="text-red-500">{error}</p> : (
             <div className="space-y-4">
                 {testimonials.map(item => (

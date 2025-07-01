@@ -29,7 +29,7 @@ const AdminGalleryPage = () => {
   const fetchGalleryItems = async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get('https://vip-israel-server.onrender.com/api/gallery');
+      const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/gallery`);
       setItems(data);
       setLoading(false);
     } catch (err) {
@@ -43,7 +43,8 @@ const AdminGalleryPage = () => {
   const deleteHandler = async (id) => {
     if (window.confirm('האם אתה בטוח שברצונך למחוק פריט זה?')) {
       try {
-        await axios.delete(`https://vip-israel-server.onrender.com/api/gallery/${id}`, config);
+        // === תיקון: הוספת ה-ID לכתובת ה-URL ===
+        await axios.delete(`${import.meta.env.VITE_API_URL}/api/gallery/${id}`, config);
         fetchGalleryItems();
       } catch (err) {
         setError('לא ניתן היה למחוק את הפריט.');
@@ -62,11 +63,17 @@ const AdminGalleryPage = () => {
     formData.append('file', file);
     try {
       const uploadConfig = { headers: { 'Content-Type': 'multipart/form-data' } };
-      const { data: uploadData } = await axios.post('https://vip-israel-server.onrender.com/api/upload', formData, uploadConfig);
+      
+      // === תיקון: שליחת הקובץ ל- /api/upload ===
+      const { data: uploadData } = await axios.post(`${import.meta.env.VITE_API_URL}/api/upload`, formData, uploadConfig);
+      
       const { url, public_id } = uploadData;
       const mediaType = file.type.startsWith('video') ? 'video' : 'image';
       const finalTitle = title.trim() === '' ? file.name : title;
-      await axios.post('https://vip-israel-server.onrender.com/api/gallery', { title: finalTitle, category, mediaType, mediaUrl: url, public_id, }, config);
+      
+      // שליחת המידע ל- /api/gallery ליצירת הרשומה ב-DB
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/gallery`, { title: finalTitle, category, mediaType, mediaUrl: url, public_id, }, config);
+      
       setUploading(false);
       setTitle('');
       setCategory(CATEGORIES[0].key);

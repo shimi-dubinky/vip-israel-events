@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
-import axios from 'axios';
+import axios from '../../api/axios';
 
 const ContactPage = () => {
   const { t } = useTranslation();
@@ -29,7 +29,7 @@ const ContactPage = () => {
         endDate: endDate ? endDate.toISOString().split('T')[0] : '',
     };
     try {
-      await axios.post('https://vip-israel-server.onrender.com/api/contact', finalFormData);
+      await axios.post('/contact', finalFormData);
       setSubmitMessage(t('contact_success_message', { name: formData.name }));
       setFormData({ name: '', email: '', phone: '', participants: '', eventType: '', message: '' });
       setStartDate(null);
