@@ -2,21 +2,33 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
-import axios from '../../api/axios';
+import axios from 'axios';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
+
 
 const ContactPage = () => {
   const { t } = useTranslation();
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', participants: '', eventType: '', message: '' });
+  
+  const [formData, setFormData] = useState({ name: '', email: '', participants: '', eventType: '', message: '' });
+  const [phone, setPhone] = useState('');
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
 
-  const eventTypes = [ 'בר/בת מצווה', 'גיבוש קהילה', 'נסיעת קודש / משפחתי', 'סידור חגים בארץ הקודש', 'אחר' ];
+  // מערך של מפתחות התרגום לסוגי האירועים
+  const eventTypeKeys = [
+    'event_type_mitzvah',
+    'event_type_community',
+    'event_type_family',
+    'event_type_holidays',
+    'event_type_other'
+  ];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({ ...prevState, [name]: value }));
+    setFormData(prevState => ({ ...prevState, [name]: value, }));
   };
 
   const handleSubmit = async (e) => {
@@ -25,13 +37,15 @@ const ContactPage = () => {
     setSubmitMessage('');
     const finalFormData = {
         ...formData,
+        phone,
         startDate: startDate ? startDate.toISOString().split('T')[0] : '',
         endDate: endDate ? endDate.toISOString().split('T')[0] : '',
     };
     try {
-      await axios.post('/contact', finalFormData);
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/contact`, finalFormData);
       setSubmitMessage(t('contact_success_message', { name: formData.name }));
-      setFormData({ name: '', email: '', phone: '', participants: '', eventType: '', message: '' });
+      setFormData({ name: '', email: '', participants: '', eventType: '', message: '' });
+      setPhone('');
       setStartDate(null);
       setEndDate(null);
     } catch (error) {
@@ -60,28 +74,28 @@ const ContactPage = () => {
           </div>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="phone" className="block text-sm font-medium text-lightest-slate mb-1">{t('form_phone')}</label>
-              <input type="tel" id="phone" name="phone" value={formData.phone} onChange={handleChange} className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" />
+              <label htmlFor="phone" className="block text-sm font-medium text-lightest-slate mb-1">{t('form_phone')}*</label>
+              <PhoneInput id="phone" international defaultCountry="IL" value={phone} onChange={setPhone} className="phone-input-container" required />
             </div>
             <div>
-              <label htmlFor="participants" className="block text-sm font-medium text-lightest-slate mb-1">כמות משתתפים צפויה</label>
-              <input type="number" id="participants" name="participants" min="1" value={formData.participants} onChange={handleChange} className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" />
+              <label htmlFor="participants" className="block text-sm font-medium text-lightest-slate mb-1">{t('form_participants')}*</label>
+              <input type="number" id="participants" name="participants" min="1" value={formData.participants} onChange={handleChange} className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" required />
             </div>
           </div>
           <div>
-             <label className="block text-sm font-medium text-lightest-slate mb-1">תאריכי טיול (מ- עד)</label>
+             <label className="block text-sm font-medium text-lightest-slate mb-1">{t('form_trip_dates')}*</label>
              <div className="grid md:grid-cols-2 gap-6">
-                <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} selectsStart startDate={startDate} endDate={endDate} placeholderText="תאריך התחלה" className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" dateFormat="dd/MM/yyyy"/>
-                <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} selectsEnd startDate={startDate} endDate={endDate} minDate={startDate} placeholderText="תאריך סיום" className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" dateFormat="dd/MM/yyyy"/>
+                <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} selectsStart startDate={startDate} endDate={endDate} placeholderText={t('form_start_date')} className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" dateFormat="dd/MM/yyyy" required />
+                <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} selectsEnd startDate={startDate} endDate={endDate} minDate={startDate} placeholderText={t('form_end_date')} className="w-full bg-slate-900/50 p-3 border border-slate-700 rounded-md text-white focus:ring-gold-base focus:border-gold-base transition-colors" dateFormat="dd/MM/yyyy" required />
              </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-lightest-slate mb-2">סוג האירוע*</label>
+            <label className="block text-sm font-medium text-lightest-slate mb-2">{t('form_event_type')}*</label>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {eventTypes.map(event => (
-                <div key={event}>
-                  <input type="radio" id={event} name="eventType" value={event} onChange={handleChange} checked={formData.eventType === event} className="sr-only" required />
-                  <label htmlFor={event} className={`block text-center p-3 rounded-md cursor-pointer border transition-all ${formData.eventType === event ? 'bg-gold-base border-gold-base text-primary font-bold' : 'bg-slate-900/50 border-slate-700 text-lightest-slate hover:border-slate-500'}`}>{event}</label>
+              {eventTypeKeys.map(eventKey => (
+                <div key={eventKey}>
+                  <input type="radio" id={eventKey} name="eventType" value={t(eventKey)} onChange={handleChange} checked={formData.eventType === t(eventKey)} className="sr-only" required />
+                  <label htmlFor={eventKey} className={`block text-center p-3 rounded-md cursor-pointer border transition-all ${formData.eventType === t(eventKey) ? 'bg-gold-base border-gold-base text-primary font-bold' : 'bg-slate-900/50 border-slate-700 text-lightest-slate hover:border-slate-500'}`}>{t(eventKey)}</label>
                 </div>
               ))}
             </div>
@@ -99,4 +113,5 @@ const ContactPage = () => {
     </motion.div>
   );
 };
+
 export default ContactPage;

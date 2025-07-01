@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import axios from '../../api/axios';
+import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { CATEGORIES } from '../../data/categories';
 
@@ -23,7 +23,7 @@ const GalleryPage = () => {
     const fetchItems = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('/gallery');
+        const { data } = await axios.get(`${import.meta.env.VITE_API_URL}/api/gallery`);
         setGalleryItems(data);
         setError('');
       } catch (error) {
@@ -77,7 +77,8 @@ const GalleryPage = () => {
 
         {loading ? <div className="text-center text-xl text-gold-base">טוען את הגלריה...</div> : 
          error ? <div className="text-center text-xl text-red-500">{error}</div> : (
-          <motion.div layout className="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+          /* ======================= כאן בוצע השינוי ======================= */
+          <motion.div layout className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-2 sm:gap-4 space-y-2 sm:space-y-4">
             <AnimatePresence>
               {filteredItems.map(item => (
                 <motion.div key={item._id} className="group overflow-hidden rounded-lg shadow-lg cursor-pointer break-inside-avoid" layoutId={`card-image-container-${item._id}`} onClick={() => setSelectedId(item._id)} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4 }}>
@@ -96,7 +97,9 @@ const GalleryPage = () => {
       <AnimatePresence>
         {selectedId && selectedItem && (
           <motion.div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4" onClick={() => setSelectedId(null)}>
-            <button onClick={(e) => { e.stopPropagation(); navigateImage(-1); }} className="absolute left-4 md:left-10 text-white/70 hover:text-white transition-colors z-50"><ChevronLeftIcon className="w-10 h-10" /></button>
+            {/* ======================= כאן בוצע השינוי ======================= */}
+            {/* החיצים יוסתרו במובייל ויופיעו רק מדסקטופ */}
+            <button onClick={(e) => { e.stopPropagation(); navigateImage(-1); }} className="hidden md:block absolute left-4 md:left-10 text-white/70 hover:text-white transition-colors z-50"><ChevronLeftIcon className="w-10 h-10" /></button>
             <motion.div className="relative max-w-5xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()} layoutId={`card-image-container-${selectedId}`}>
               <AnimatePresence mode="wait">
                 <motion.div key={selectedId} className="w-full h-full flex items-center justify-center">
@@ -108,7 +111,7 @@ const GalleryPage = () => {
                 </motion.div>
               </AnimatePresence>
             </motion.div>
-            <button onClick={(e) => { e.stopPropagation(); navigateImage(1); }} className="absolute right-4 md:right-10 text-white/70 hover:text-white transition-colors z-50"><ChevronRightIcon className="w-10 h-10" /></button>
+            <button onClick={(e) => { e.stopPropagation(); navigateImage(1); }} className="hidden md:block absolute right-4 md:right-10 text-white/70 hover:text-white transition-colors z-50"><ChevronRightIcon className="w-10 h-10" /></button>
           </motion.div>
         )}
       </AnimatePresence>

@@ -5,15 +5,19 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-primary text-white">
-      <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center">
-        <p>&copy; {currentYear} {t('site_name')}. {t('footer_rights')}</p>
-        <div className="flex space-x-6 mt-4 md:mt-0">
-          {/* בעתיד נוסיף פה קישורים אמיתיים */}
-          <a href="#" className="hover:text-white transition-colors">Facebook</a>
-          <a href="#" className="hover:text-white transition-colors">Instagram</a>
-          <a href="#" className="hover:text-white transition-colors">WhatsApp</a>
-        </div>
+    <footer className="bg-primary text-secondary border-t border-white/10">
+      <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-start">
+        
+        {/* צד ימין - זכויות יוצרים */}
+        <p className="text-sm">
+          &copy; {currentYear} {t('site_name')}. {t('footer_rights')}
+        </p>
+        
+        {/* צד שמאל - קרדיט למפתח */}
+        <p className="text-sm mt-4 md:mt-0">
+          Built with ♥ by <a href="#" className="font-medium text-lightest-slate hover:text-gold-base transition-colors">Shimon Dubinky</a>
+        </p>
+
       </div>
     </footer>
   );

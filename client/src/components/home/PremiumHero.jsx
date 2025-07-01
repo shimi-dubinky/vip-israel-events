@@ -12,21 +12,20 @@ export const PremiumHero = () => {
       <motion.div className="relative z-20 container mx-auto px-4 text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
         
         <h1 
-          className="text-5xl md:text-8xl font-bold font-serif leading-tight bg-gradient-to-br from-gold-highlight via-gold-base to-gold-shadow bg-clip-text text-transparent" 
+          className="text-4xl sm:text-5xl md:text-8xl font-bold font-serif leading-tight bg-gradient-to-br from-gold-highlight via-gold-base to-gold-shadow bg-clip-text text-transparent" 
           style={{ textShadow: '1px 1px 2px rgba(160, 82, 45, 0.4)' }}
         >
           {t('hero_title')}
         </h1>
 
         <motion.p 
-          className="mt-6 text-lg md:text-xl max-w-3xl mx-auto text-lightest-slate" 
+          className="mt-6 text-base md:text-xl max-w-3xl mx-auto text-lightest-slate" 
           initial={{ y: 20, opacity: 0 }} 
           animate={{ y: 0, opacity: 1 }} 
           transition={{ duration: 1, delay: 0.5 }}
         >
           {t('hero_subtitle')}
         </motion.p>
-        
         
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }} 
@@ -35,7 +34,7 @@ export const PremiumHero = () => {
         >
           <Link 
             to="/contact" 
-            className="mt-10 inline-block bg-gradient-to-br from-gold-base via-gold-shadow to-gold-dark-details text-white font-bold py-4 px-10 rounded-lg text-lg shadow-xl shadow-gold-shadow/30 border border-gold-highlight/50 hover:shadow-2xl hover:shadow-gold-base/40 transition-all transform hover:scale-105" 
+            className="mt-8 md:mt-10 inline-block bg-gradient-to-br from-gold-base via-gold-shadow to-gold-dark-details text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-lg text-base md:text-lg shadow-xl shadow-gold-shadow/30 border border-gold-highlight/50 hover:shadow-2xl hover:shadow-gold-base/40 transition-all transform hover:scale-105" 
           >
             {t('hero_button')}
           </Link>

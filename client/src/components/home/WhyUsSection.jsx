@@ -16,17 +16,20 @@ export const WhyUsSection = () => {
     >
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-          <div className="w-full h-[500px] rounded-2xl overflow-hidden shadow-2xl">
+          {/* שינוי: גובה רספונסיבי לתמונה */}
+          <div className="w-full h-[350px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
             <img 
               src={amtHelicopter} 
               alt="Helicopter over Jerusalem" 
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="text-white">
+          {/* שינוי: יישור טקסט רספונסיבי */}
+          <div className="text-white text-center md:text-start">
             <h2 className="text-4xl md:text-5xl font-bold text-lightest-slate mb-6 font-serif">{t('why_us_title')}</h2>
             <p className="text-secondary text-lg mb-8">{t('why_us_subtitle')}</p>
-            <ul className="space-y-4">
+            {/* הוספנו inline-block ו-text-start לרשימה כדי שהיא תתיישר נכון בתוך הקונטיינר הממורכז */}
+            <ul className="space-y-4 inline-block text-start">
               {whyUsPoints.map((point, index) => (
                 <li key={index} className="flex items-start">
                   <span className="bg-gold-base text-primary rounded-full flex-shrink-0 w-6 h-6 flex items-center justify-center font-bold mr-4 mt-1">✓</span>

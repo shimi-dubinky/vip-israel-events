@@ -3,20 +3,15 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import axios from 'axios';
 
-// ייבוא של Swiper ורכיביו
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
 
-// ייבוא של Lightbox
-import Lightbox from "yet-another-react-lightbox";
-
-// ייבוא של קבצי ה-CSS של הספריות
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
-// רכיב הכרטיס המשודרג
 const TestimonialCard = ({ testimonial, onImageClick }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const isMediaCard = testimonial.mediaType === 'image' || testimonial.mediaType === 'video';
@@ -27,7 +22,7 @@ const TestimonialCard = ({ testimonial, onImageClick }) => {
       onImageClick();
     }
   };
-
+  
   return (
     <motion.div 
       className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group ${isMediaCard ? 'cursor-pointer' : ''}`}
@@ -132,7 +127,10 @@ export const TestimonialsCarousel = () => {
                             centeredSlides={true}
                             loop={testimonials.length > 2}
                             pagination={{ clickable: true, el: '.swiper-pagination-custom' }}
-                            navigation={{ nextEl: '.swiper-button-next-custom', prevEl: '.swiper-button-prev-custom' }}
+                            navigation={{
+                              nextEl: '.swiper-button-next-custom',
+                              prevEl: '.swiper-button-prev-custom',
+                            }}
                             className="!pb-16"
                         >
                             {testimonials.map((testimonial) => (
@@ -141,9 +139,10 @@ export const TestimonialsCarousel = () => {
                                 </SwiperSlide>
                             ))}
                         </Swiper>
-
-                        <div className="swiper-button-prev-custom absolute top-1/2 -left-4 md:-left-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronLeft /></div>
-                        <div className="swiper-button-next-custom absolute top-1/2 -right-4 md:-right-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronRight /></div>
+                        
+                        {/* שינוי: החיצים מוסתרים במובייל (hidden) וגלויים רק ב-md ומעלה */}
+                        <div className="hidden md:block swiper-button-prev-custom absolute top-1/2 -left-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronLeft /></div>
+                        <div className="hidden md:block swiper-button-next-custom absolute top-1/2 -right-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronRight /></div>
                         <div className="swiper-pagination-custom text-center mt-8"></div>
                     </div>
                 </div>

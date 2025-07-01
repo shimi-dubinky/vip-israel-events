@@ -51,5 +51,15 @@
   "cat_family_trip_desc": "טיולים פרטיים מותאמים אישית למשפחות, המשלבים יוקרה, נוחות, והעמקה במורשת ישראל.",
   "cat_holidays_title": "חגים בארץ הקודש",
   "cat_holidays_desc": "חווית חג בלתי נשכחת בישראל, כולל סידורי תפילה, אירוח יוקרתי ופעילויות ייחודיות.",
-  "all": "הכל"
+  "all": "הכל",
+  "form_participants": "כמות משתתפים צפויה",
+  "form_trip_dates": "תאריכי טיול (מ- עד)",
+  "form_start_date": "תאריך התחלה",
+  "form_end_date": "תאריך סיום",
+  "form_event_type": "סוג האירוע",
+  "event_type_mitzvah": "בר/בת מצווה",
+  "event_type_community": "גיבוש קהילה",
+  "event_type_family": "נסיעת קודש / משפחתי",
+  "event_type_holidays": "סידור חגים בארץ הקודש",
+  "event_type_other": "אחר"
 }

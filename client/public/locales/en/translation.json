@@ -51,5 +51,15 @@
   "cat_family_desc": "Custom-tailored private tours for families, combining luxury, comfort, and a deep dive into Israeli heritage.",
   "cat_holidays_title": "Holidays in the Holy Land",
   "cat_holidays_desc": "An unforgettable holiday experience in Israel, including prayer arrangements, luxury hospitality, and unique activities.",
-  "all": "All"
+  "all": "All",
+  "form_participants": "Expected Number of Participants",
+  "form_trip_dates": "Trip Dates (From - To)",
+  "form_start_date": "Start Date",
+  "form_end_date": "End Date",
+  "form_event_type": "Event Type",
+  "event_type_mitzvah": "Bar/Bat Mitzvah",
+  "event_type_community": "Community Retreat",
+  "event_type_family": "Holy/Family Trip",
+  "event_type_holidays": "Holidays in the Holy Land",
+  "event_type_other": "Other"
 }
