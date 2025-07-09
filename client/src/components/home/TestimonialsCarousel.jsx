@@ -1,20 +1,15 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect, useMemo, useRef } from "react";
-import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
-
-// ייבוא רכיבי הלייטבוקס
 import Lightbox from "yet-another-react-lightbox";
 import Video from "yet-another-react-lightbox/plugins/video";
-import "yet-another-react-lightbox/styles.css";
-
-// ייבוא סגנונות סוויפר
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import "yet-another-react-lightbox/styles.css";
 
 const TestimonialCard = ({ testimonial, onMediaClick }) => {
   const { t } = useTranslation();
@@ -22,10 +17,16 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
   const isMediaCard = testimonial.mediaType === 'image' || testimonial.mediaType === 'video';
   const isLongText = testimonial.mediaType === 'quote' && testimonial.content.length > 150;
 
+  const handleCardClick = () => {
+    if (isMediaCard) {
+      onMediaClick();
+    }
+  };
+
   return (
     <motion.div 
       className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group ${isMediaCard ? 'cursor-pointer' : ''}`}
-      onClick={isMediaCard ? onMediaClick : undefined}
+      onClick={handleCardClick}
       whileHover={{ 
         boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)",
         borderColor: "rgba(59, 130, 246, 0.3)"
@@ -48,10 +49,8 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
           )}
           {isMediaCard && (
             <div className="w-full h-full rounded-2xl overflow-hidden relative">
-              {/* תמיד נשתמש ב-object-cover לתצוגה המקדימה כדי לשמור על עיצוב אחיד */}
               <img src={testimonial.thumbnailUrl} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />
               <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  {/* אייקון שונה לתמונה או וידאו */}
                   {testimonial.mediaType === 'image' ? 
                     <svg className="w-12 h-12 text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg> :
                     <svg className="w-16 h-16 text-white/70" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>
@@ -96,12 +95,12 @@ export const TestimonialsCarousel = () => {
 
     const mediaTestimonials = useMemo(() => testimonials.filter(t => t.mediaType === 'image' || t.mediaType === 'video'), [testimonials]);
 
-    const lightboxSlides = mediaTestimonials.map(t => {
+    const lightboxSlides = useMemo(() => mediaTestimonials.map(t => {
       if (t.mediaType === 'video') {
-        return { type: 'video', sources: [{ src: t.content, type: 'video/mp4' }], width: 1280, height: 720 };
+        return { type: 'video', sources: [{ src: t.content, type: 'video/mp4' }], width: 1920, height: 1080 };
       }
       return { src: t.content };
-    });
+    }), [mediaTestimonials]);
 
     const openLightbox = (testimonialId) => {
         const mediaIndex = mediaTestimonials.findIndex(t => t._id === testimonialId);
@@ -111,7 +110,8 @@ export const TestimonialsCarousel = () => {
         }
     };
 
-    if (loading || testimonials.length === 0) return null;
+    if (loading) { return ( <section id="testimonials" className="py-32 bg-primary"><div className="container mx-auto px-4"><div className="flex justify-center items-center min-h-[400px]"><div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gold-base"></div></div></div></section> ); }
+    if (testimonials.length === 0) return null;
 
     return (
         <>
