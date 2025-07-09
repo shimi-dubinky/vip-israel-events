@@ -1,11 +1,14 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import sitemap from 'vite-plugin-sitemap' // 1. ייבוא התוסף
+import sitemap from 'vite-plugin-sitemap'
 
 export default defineConfig({
   plugins: [
     react(),
-    // 2. הפעלת התוסף עם הגדרת כתובת האתר הראשית
-    sitemap({ hostname: 'https://vip-israel-events.vercel.app' }) 
+    sitemap({ 
+      hostname: 'https://vip-israel-events.vercel.app',
+      // ההוראה החדשה: אל תיגע או תיצור קובץ robots.txt
+      generateRobotsTxt: false, 
+    })
   ],
 })

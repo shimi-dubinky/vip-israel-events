@@ -6,7 +6,16 @@ const AdminTestimonialsPage = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [formState, setFormState] = useState({ author: '', origin: '', mediaType: 'quote', content: '', thumbnailFile: null, contentFile: null, videoPosterFile: null });
+
+  const [formState, setFormState] = useState({
+    author: '',
+    origin: '',
+    mediaType: 'quote',
+    content: '',
+    thumbnailFile: null,
+    contentFile: null,
+    videoPosterFile: null,
+  });
   const [uploading, setUploading] = useState(false);
   const [formError, setFormError] = useState('');
 
@@ -54,7 +63,7 @@ const AdminTestimonialsPage = () => {
     setUploading(true);
     setFormError('');
     try {
-      if (!formState.thumbnailFile) throw new Error('יש להעלות תמונת פרופיל (תמונה ממוזערת).');
+      if (!formState.thumbnailFile) throw new Error('יש להעלות תמונת פרופיל.');
       
       const thumbnailData = await uploadFileHandler(formState.thumbnailFile);
       let contentData = { url: formState.content, public_id: null };
@@ -69,7 +78,7 @@ const AdminTestimonialsPage = () => {
         videoPosterData = await uploadFileHandler(formState.videoPosterFile);
       }
       
-      const testimonialPayload = { author: formState.author, origin: formState.origin, mediaType: formState.mediaType, content: contentData.url, thumbnailUrl: thumbnailData.url, videoPosterUrl: videoPosterData.url, content_public_id: contentData.public_id, thumbnail_public_id: thumbnailData.public_id, videoPoster_public_id: videoPosterData.public_id, };
+      const testimonialPayload = { author: formState.author, origin: formState.origin, mediaType: formState.mediaType, content: contentData.url, thumbnailUrl: thumbnailData.url, videoPosterUrl: videoPosterData.url, content_public_id: contentData.public_id, thumbnail_public_id: thumbnailData.public_id, videoPoster_public_id: videoPosterData.public_id };
       await axios.post(`${import.meta.env.VITE_API_URL}/api/testimonials`, testimonialPayload, config);
       
       setUploading(false);
@@ -112,7 +121,12 @@ const AdminTestimonialsPage = () => {
                 <input type="file" name="thumbnailFile" id="thumbnailFile-input" onChange={handleFileChange} required accept="image/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gold-base/80 file:text-primary hover:file:bg-gold-base" />
               </div>
               {formState.mediaType === 'image' && (<div><label className="block text-sm font-bold mb-1">קובץ התמונה*</label><input type="file" name="contentFile" id="contentFile-input" onChange={handleFileChange} required accept="image/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gold-base/80 file:text-primary hover:file:bg-gold-base" /></div>)}
-              {formState.mediaType === 'video' && (<><div><label className="block text-sm font-bold mb-1">קובץ הווידאו*</label><input type="file" name="contentFile" id="contentFile-input" onChange={handleFileChange} required accept="video/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gold-base/80 file:text-primary hover:file:bg-gold-base" /></div><div><label className="block text-sm font-bold mb-1">תמונת תצוגה מקדימה לווידאו*</label><input type="file" name="videoPosterFile" id="videoPosterFile-input" onChange={handleFileChange} required accept="image/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gold-base/80 file:text-primary hover:file:bg-gold-base" /></div></ нрав>)}
+              {formState.mediaType === 'video' && (
+                <>
+                  <div><label className="block text-sm font-bold mb-1">קובץ הווידאו*</label><input type="file" name="contentFile" id="contentFile-input" onChange={handleFileChange} required accept="video/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gold-base/80 file:text-primary hover:file:bg-gold-base" /></div>
+                  <div><label className="block text-sm font-bold mb-1">תמונת תצוגה מקדימה לווידאו*</label><input type="file" name="videoPosterFile" id="videoPosterFile-input" onChange={handleFileChange} required accept="image/*" className="w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:font-semibold file:bg-gold-base/80 file:text-primary hover:file:bg-gold-base" /></div>
+                </>
+              )}
             </div>
             <button type="submit" disabled={uploading} className="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded disabled:bg-gray-500">{uploading ? 'מעלה קבצים...' : 'הוסף המלצה'}</button>
             {formError && <p className="text-red-500 mt-2">{formError}</p>}
