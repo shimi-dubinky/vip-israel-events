@@ -43,7 +43,6 @@ const AdminGalleryPage = () => {
   const deleteHandler = async (id) => {
     if (window.confirm('האם אתה בטוח שברצונך למחוק פריט זה?')) {
       try {
-        // === תיקון: הוספת ה-ID לכתובת ה-URL ===
         await axios.delete(`${import.meta.env.VITE_API_URL}/api/gallery/${id}`, config);
         fetchGalleryItems();
       } catch (err) {
@@ -62,16 +61,13 @@ const AdminGalleryPage = () => {
     const formData = new FormData();
     formData.append('file', file);
     try {
-      const uploadConfig = { headers: { 'Content-Type': 'multipart/form-data' } };
-      
-      // === תיקון: שליחת הקובץ ל- /api/upload ===
+      const uploadConfig = { headers: { 'Content-Type': 'multipart/form-data', Authorization: `Bearer ${userInfo?.token}` } };
       const { data: uploadData } = await axios.post(`${import.meta.env.VITE_API_URL}/api/upload`, formData, uploadConfig);
       
       const { url, public_id } = uploadData;
       const mediaType = file.type.startsWith('video') ? 'video' : 'image';
       const finalTitle = title.trim() === '' ? file.name : title;
       
-      // שליחת המידע ל- /api/gallery ליצירת הרשומה ב-DB
       await axios.post(`${import.meta.env.VITE_API_URL}/api/gallery`, { title: finalTitle, category, mediaType, mediaUrl: url, public_id, }, config);
       
       setUploading(false);

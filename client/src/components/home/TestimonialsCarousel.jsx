@@ -17,16 +17,10 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
   const isMediaCard = testimonial.mediaType === 'image' || testimonial.mediaType === 'video';
   const isLongText = testimonial.mediaType === 'quote' && testimonial.content.length > 150;
 
-  const handleCardClick = () => {
-    if (isMediaCard) {
-      onMediaClick();
-    }
-  };
-
   return (
     <motion.div 
       className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group ${isMediaCard ? 'cursor-pointer' : ''}`}
-      onClick={handleCardClick}
+      onClick={isMediaCard ? onMediaClick : undefined}
       whileHover={{ 
         boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)",
         borderColor: "rgba(59, 130, 246, 0.3)"
@@ -48,14 +42,21 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
             </div>
           )}
           {isMediaCard && (
-            <div className="w-full h-full rounded-2xl overflow-hidden relative">
-              <img src={testimonial.thumbnailUrl} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />
-              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
-                  {testimonial.mediaType === 'image' ? 
-                    <svg className="w-12 h-12 text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg> :
-                    <svg className="w-16 h-16 text-white/70" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>
-                  }
-              </div>
+            <div className="w-full h-full rounded-2xl overflow-hidden">
+              {testimonial.mediaType === 'image' && <img src={testimonial.content} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />}
+              {/* ===================== התיקון המרכזי כאן ===================== */}
+              {testimonial.mediaType === 'video' && (
+                <video 
+                  src={testimonial.content} 
+                  className="w-full h-full object-cover shadow-2xl" 
+                  autoPlay 
+                  loop 
+                  muted 
+                  playsInline 
+                  onClick={(e) => e.stopPropagation()} 
+                />
+              )}
+              {/* ========================================================== */}
             </div>
           )}
         </div>
@@ -92,7 +93,7 @@ export const TestimonialsCarousel = () => {
         };
         fetchTestimonials();
     }, []);
-
+    
     const mediaTestimonials = useMemo(() => testimonials.filter(t => t.mediaType === 'image' || t.mediaType === 'video'), [testimonials]);
 
     const lightboxSlides = useMemo(() => mediaTestimonials.map(t => {
@@ -116,13 +117,12 @@ export const TestimonialsCarousel = () => {
     return (
         <>
             <section id="testimonials" className="py-32 bg-primary overflow-hidden">
-                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-700 via-primary to-primary"></div>
+                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-700 via-primary to-primary"></div>
                 <div className="container mx-auto px-4 relative z-10">
                     <motion.div className="text-center mb-20" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
                         <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-white mb-6 font-serif leading-tight">{t('testimonials_title')}</h2>
                         <div className="w-24 h-1 bg-gradient-to-r from-gold-base to-gold-shadow mx-auto rounded-full"></div>
                     </motion.div>
-                    
                     <div className="relative max-w-7xl mx-auto">
                         <Swiper
                             modules={[Navigation, Pagination, A11y]}
