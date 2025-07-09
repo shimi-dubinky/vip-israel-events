@@ -7,8 +7,9 @@ export const WhyUsSection = () => {
   const whyUsPoints = t('why_us_points', { returnObjects: true });
 
   return (
+    // שינוי: הורדנו את הריווח העליון (py-24 -> pt-0 pb-24)
     <motion.section 
-      className="py-24 bg-primary"
+      className="pt-0 pb-24 bg-primary"
       initial={{ opacity: 0 }} 
       whileInView={{ opacity: 1 }} 
       viewport={{ once: true }} 
@@ -16,7 +17,6 @@ export const WhyUsSection = () => {
     >
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
-          {/* שינוי: גובה רספונסיבי לתמונה */}
           <div className="w-full h-[350px] md:h-[500px] rounded-2xl overflow-hidden shadow-2xl">
             <img 
               src={amtHelicopter} 
@@ -24,11 +24,9 @@ export const WhyUsSection = () => {
               className="w-full h-full object-cover"
             />
           </div>
-          {/* שינוי: יישור טקסט רספונסיבי */}
           <div className="text-white text-center md:text-start">
             <h2 className="text-4xl md:text-5xl font-bold text-lightest-slate mb-6 font-serif">{t('why_us_title')}</h2>
             <p className="text-secondary text-lg mb-8">{t('why_us_subtitle')}</p>
-            {/* הוספנו inline-block ו-text-start לרשימה כדי שהיא תתיישר נכון בתוך הקונטיינר הממורכז */}
             <ul className="space-y-4 inline-block text-start">
               {whyUsPoints.map((point, index) => (
                 <li key={index} className="flex items-start">
