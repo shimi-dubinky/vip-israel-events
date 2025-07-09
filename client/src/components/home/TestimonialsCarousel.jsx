@@ -4,12 +4,16 @@ import { useTranslation } from "react-i18next";
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
+
+// ייבוא רכיבי הלייטבוקס
 import Lightbox from "yet-another-react-lightbox";
-import Video from "yet-another-react-lightbox/plugins/video"; // 1. ייבוא תוסף הווידאו
+import Video from "yet-another-react-lightbox/plugins/video";
+import "yet-another-react-lightbox/styles.css";
+
+// ייבוא סגנונות סוויפר
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import "yet-another-react-lightbox/styles.css";
 
 const TestimonialCard = ({ testimonial, onMediaClick }) => {
   const { t } = useTranslation();
@@ -42,10 +46,16 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
             </div>
           )}
           {isMediaCard && (
-            <div className="w-full h-full rounded-2xl overflow-hidden">
-              {testimonial.mediaType === 'image' && <img src={testimonial.content} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />}
-              {/* תצוגה מקדימה פשוטה לווידאו, ללא פקדים */ }
-              {testimonial.mediaType === 'video' && <div className="w-full h-full bg-black flex items-center justify-center"><div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center"><svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg></div></div>}
+            <div className="w-full h-full rounded-2xl overflow-hidden relative">
+              {/* תמיד נשתמש ב-object-cover לתצוגה המקדימה כדי לשמור על עיצוב אחיד */}
+              <img src={testimonial.thumbnailUrl} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                  {/* אייקון שונה לתמונה או וידאו */}
+                  {testimonial.mediaType === 'image' ? 
+                    <svg className="w-12 h-12 text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg> :
+                    <svg className="w-16 h-16 text-white/70" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>
+                  }
+              </div>
             </div>
           )}
         </div>
@@ -82,11 +92,12 @@ export const TestimonialsCarousel = () => {
         };
         fetchTestimonials();
     }, []);
-    
-    const mediaTestimonials = testimonials.filter(t => t.mediaType === 'image' || t.mediaType === 'video');
+
+    const mediaTestimonials = useMemo(() => testimonials.filter(t => t.mediaType === 'image' || t.mediaType === 'video'), [testimonials]);
+
     const lightboxSlides = mediaTestimonials.map(t => {
       if (t.mediaType === 'video') {
-        return { type: 'video', sources: [{ src: t.content, type: 'video/mp4' }], width: 1920, height: 1080 };
+        return { type: 'video', sources: [{ src: t.content, type: 'video/mp4' }], width: 1280, height: 720 };
       }
       return { src: t.content };
     });
@@ -104,7 +115,7 @@ export const TestimonialsCarousel = () => {
     return (
         <>
             <section id="testimonials" className="py-32 bg-primary overflow-hidden">
-                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-700 via-primary to-primary"></div>
+                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-slate-700 via-primary to-primary"></div>
                 <div className="container mx-auto px-4 relative z-10">
                     <motion.div className="text-center mb-20" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
                         <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-white mb-6 font-serif leading-tight">{t('testimonials_title')}</h2>
@@ -139,7 +150,7 @@ export const TestimonialsCarousel = () => {
                 close={() => setLightboxOpen(false)}
                 index={lightboxIndex}
                 slides={lightboxSlides}
-                plugins={[Video]} // 2. הפעלת תוסף הווידאו
+                plugins={[Video]}
             />
         </>
     );
