@@ -48,7 +48,7 @@ const ServiceCard = ({ category, index }) => {
 export const ServicesGrid = () => {
   const { t } = useTranslation();
   return (
-    <section id="events" className="py-24 bg-primary">
+    <section id="events" className="py-20 bg-primary">
       <div className="container mx-auto px-4">
         <motion.div 
           className="text-center mb-16"

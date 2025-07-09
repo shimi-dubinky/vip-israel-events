@@ -31,9 +31,8 @@ export const WhyUsSection = () => {
   const whyUsPoints = t('why_us_points', { returnObjects: true });
 
   return (
-    // התיקון: התג הפותח הוא כעת motion.section, כמו התג הסוגר
     <motion.section 
-      className="py-24 bg-primary"
+      className="py-20 bg-primary"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
