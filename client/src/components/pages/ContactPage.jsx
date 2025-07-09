@@ -5,11 +5,10 @@ import DatePicker from 'react-datepicker';
 import axios from 'axios';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
-
+import { Helmet } from 'react-helmet-async';
 
 const ContactPage = () => {
-  const { t } = useTranslation();
-  
+  const { t } = useTranslation(); 
   const [formData, setFormData] = useState({ name: '', email: '', participants: '', eventType: '', message: '' });
   const [phone, setPhone] = useState('');
   const [startDate, setStartDate] = useState(null);
@@ -57,6 +56,11 @@ const ContactPage = () => {
   };
 
   return (
+    <>
+   <Helmet>
+        <title>{t('seo_contact_title')}</title>
+        <meta name="description" content={t('seo_contact_description')} />
+      </Helmet>
     <motion.div className="py-24 bg-primary" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <div className="container mx-auto px-4 max-w-3xl">
         <motion.h1 className="text-4xl md:text-5xl font-bold text-center mb-8 text-gold-highlight font-serif" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}>{t('contact_title')}</motion.h1>
@@ -111,6 +115,7 @@ const ContactPage = () => {
         </motion.form>
       </div>
     </motion.div>
+    </>
   );
 };
 

@@ -1,0 +1,6 @@
+# Allow all friendly web crawlers
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://vip-israel-events.vercel.app/sitemap.xml
