@@ -2,17 +2,16 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import axios from 'axios';
-
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
-
+import Lightbox from "yet-another-react-lightbox";
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import Lightbox from "yet-another-react-lightbox";
 import "yet-another-react-lightbox/styles.css";
 
 const TestimonialCard = ({ testimonial, onImageClick }) => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const isMediaCard = testimonial.mediaType === 'image' || testimonial.mediaType === 'video';
   const isLongText = testimonial.mediaType === 'quote' && testimonial.content.length > 150;
@@ -22,15 +21,12 @@ const TestimonialCard = ({ testimonial, onImageClick }) => {
       onImageClick();
     }
   };
-  
+
   return (
-    <motion.div 
+    <motion.div
       className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group ${isMediaCard ? 'cursor-pointer' : ''}`}
       onClick={handleCardClick}
-      whileHover={{ 
-        boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)",
-        borderColor: "rgba(59, 130, 246, 0.3)"
-      }}
+      whileHover={{ boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)", borderColor: "rgba(59, 130, 246, 0.3)" }}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
       <div className="relative h-full flex flex-col justify-between z-10">
@@ -42,7 +38,7 @@ const TestimonialCard = ({ testimonial, onImageClick }) => {
               </p>
               {isLongText && (
                 <button onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }} className="text-gold-base hover:text-gold-highlight font-semibold mt-2">
-                  {isExpanded ? 'הצג פחות' : 'קרא עוד...'}
+                  {isExpanded ? t('read_less') : t('read_more')}
                 </button>
               )}
             </div>
@@ -75,6 +71,7 @@ export const TestimonialsCarousel = () => {
     const { t } = useTranslation();
     const [testimonials, setTestimonials] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -86,6 +83,7 @@ export const TestimonialsCarousel = () => {
                 setTestimonials(data);
             } catch (error) {
                 console.error("Failed to fetch testimonials", error);
+                setError("לא ניתן היה לטעון את אזור הממליצים.");
             } finally {
                 setLoading(false);
             }
@@ -104,9 +102,8 @@ export const TestimonialsCarousel = () => {
         }
     };
 
-    if (loading) {
-        return ( <section id="testimonials" className="py-32 bg-primary"><div className="container mx-auto px-4"><div className="flex justify-center items-center min-h-[400px]"><div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gold-base"></div></div></div></section> );
-    }
+    if (loading) { return ( <section id="testimonials" className="py-32 bg-primary"><div className="container mx-auto px-4"><div className="flex justify-center items-center min-h-[400px]"><div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-gold-base"></div></div></div></section> ); }
+    if (error) { return ( <section id="testimonials" className="py-32 bg-primary"><div className="container mx-auto px-4"><div className="text-center text-red-400">{error}</div></div></section> ); }
     if (testimonials.length === 0) return null;
 
     return (
@@ -118,7 +115,6 @@ export const TestimonialsCarousel = () => {
                         <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-white mb-6 font-serif leading-tight">{t('testimonials_title')}</h2>
                         <div className="w-24 h-1 bg-gradient-to-r from-gold-base to-gold-shadow mx-auto rounded-full"></div>
                     </motion.div>
-                    
                     <div className="relative max-w-7xl mx-auto">
                         <Swiper
                             modules={[Navigation, Pagination, A11y]}
@@ -127,33 +123,21 @@ export const TestimonialsCarousel = () => {
                             centeredSlides={true}
                             loop={testimonials.length > 2}
                             pagination={{ clickable: true, el: '.swiper-pagination-custom' }}
-                            navigation={{
-                              nextEl: '.swiper-button-next-custom',
-                              prevEl: '.swiper-button-prev-custom',
-                            }}
-                            className="!pb-16"
-                        >
-                            {testimonials.map((testimonial) => (
+                            navigation={{ nextEl: '.swiper-button-next-custom', prevEl: '.swiper-button-prev-custom' }}
+                            className="!pb-16" >
+                            {testimonials.map((testimonial, index) => (
                                 <SwiperSlide key={testimonial._id} className="h-auto !w-auto">
                                     <TestimonialCard testimonial={testimonial} onImageClick={() => openLightbox(testimonial._id)} />
                                 </SwiperSlide>
                             ))}
                         </Swiper>
-                        
-                        {/* שינוי: החיצים מוסתרים במובייל (hidden) וגלויים רק ב-md ומעלה */}
-                        <div className="hidden md:block swiper-button-prev-custom absolute top-1/2 -left-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronLeft /></div>
-                        <div className="hidden md:block swiper-button-next-custom absolute top-1/2 -right-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronRight /></div>
+                        <div className="swiper-button-prev-custom absolute top-1/2 -left-4 md:-left-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronLeft /></div>
+                        <div className="swiper-button-next-custom absolute top-1/2 -right-4 md:-right-8 transform -translate-y-1/2 z-10 bg-white/10 hover:bg-white/20 text-white rounded-full p-3 transition-all cursor-pointer"><ChevronRight /></div>
                         <div className="swiper-pagination-custom text-center mt-8"></div>
                     </div>
                 </div>
             </section>
-
-            <Lightbox
-                open={lightboxOpen}
-                close={() => setLightboxOpen(false)}
-                index={lightboxIndex}
-                slides={lightboxSlides}
-            />
+            <Lightbox open={lightboxOpen} close={() => setLightboxOpen(false)} index={lightboxIndex} slides={lightboxSlides} />
         </>
     );
 };
