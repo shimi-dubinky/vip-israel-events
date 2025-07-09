@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { CATEGORIES } from '../../data/categories';
 
-// ייבוא התמונות
 import celebrationsImg from '../../assets/images/image3.jpg';
 import communityImg from '../../assets/images/image1.jpg';
 import familyTripImg from '../../assets/images/amt_helicopter.jpg';
@@ -31,8 +30,6 @@ const ServiceCard = ({ category, index }) => {
         viewport={{ once: true }}
         transition={{ duration: 0.7, delay: index * 0.1 }}
       >
-        
-        {/* שינינו את ערכי ה-opacity מ-20 ל-25, ומ-30 ל-40 במעבר עכבר */}
         <img src={categoryImages[category.key]} alt={t(category.titleKey)} className="absolute inset-0 w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110 opacity-25 group-hover:opacity-40" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
         
@@ -64,7 +61,7 @@ export const ServicesGrid = () => {
           <p className="text-lg text-secondary max-w-2xl mx-auto">{t('services_subtitle')}</p>
         </motion.div>
         
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {CATEGORIES.map((cat, index) => (
             <ServiceCard key={cat.key} category={cat} index={index} />
           ))}

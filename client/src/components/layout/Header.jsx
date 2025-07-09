@@ -1,14 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
-import { Link as ScrollLink, scroller } from 'react-scroll';
+import { scroller } from 'react-scroll';
 import { useTranslation } from 'react-i18next';
 
 export const Header = () => {
   const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
-
-  // Hooks חדשים לניווט חכם
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -29,14 +27,10 @@ export const Header = () => {
     { name: t('nav_contact'), href: '/contact', isPage: true },
   ];
   
-  // פונקציית ניווט חכמה חדשה
   const handleSmartScroll = (targetId) => {
-    setIsMenuOpen(false); // סגור את התפריט הנייד בכל מקרה
-    
-    // אם אנחנו לא בדף הבית
+    setIsMenuOpen(false);
     if (location.pathname !== '/') {
-      navigate('/'); // נווט לדף הבית
-      // המתן רגע קצר כדי שהדף יטען, ואז גלול
+      navigate('/');
       setTimeout(() => {
         scroller.scrollTo(targetId, {
           duration: 800,
@@ -45,7 +39,6 @@ export const Header = () => {
         });
       }, 100);
     } else {
-      // אם אנחנו כבר בדף הבית, פשוט גלול
       scroller.scrollTo(targetId, {
         duration: 800,
         smooth: 'easeInOutCubic',
@@ -59,17 +52,11 @@ export const Header = () => {
     const hoverColor = 'hover:text-gold-base';
     const className = `${baseTextColor} font-medium ${hoverColor} transition-colors cursor-pointer`;
 
-    // קישור רגיל לעמוד אחר
     if (link.isPage) {
       return <RouterLink to={link.href} className={className} onClick={() => setIsMenuOpen(false)}>{link.name}</RouterLink>;
     }
     
-    // קישור גלילה חכם
-    return (
-      <a onClick={() => handleSmartScroll(link.href)} className={className}>
-        {link.name}
-      </a>
-    );
+    return (<a onClick={() => handleSmartScroll(link.href)} className={className}>{link.name}</a>);
   };
 
   return (
@@ -82,9 +69,7 @@ export const Header = () => {
         </div>
         <div className="hidden md:flex items-center">
           <div className="flex gap-x-8">
-            {navLinks.map((link) => (
-              <NavLink key={link.name} link={link} />
-            ))}
+            {navLinks.map((link) => (<NavLink key={link.name} link={link} />))}
           </div>
           <div className='flex items-center border-s border-white/20 ms-8 ps-8 space-x-2'>
             <button onClick={() => i18n.changeLanguage('en')} className={`font-medium transition-colors ${i18n.language.startsWith('en') ? 'text-gold-base' : (hasScrolled ? 'text-lightest-slate' : 'text-white')}`}>EN</button>
@@ -100,15 +85,9 @@ export const Header = () => {
       </nav>
       {isMenuOpen && (
         <div className="md:hidden fixed top-0 left-0 w-full h-screen bg-primary/95 backdrop-blur-lg z-40 p-6 flex flex-col">
-          <div className="flex justify-end mb-8">
-            <button onClick={() => setIsMenuOpen(false)}>
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-            </button>
-          </div>
+          <div className="flex justify-end mb-8"><button onClick={() => setIsMenuOpen(false)}><svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path></svg></button></div>
           <div className="flex flex-col items-center justify-center flex-grow space-y-10">
-            {navLinks.map((link) => (
-              <NavLink key={link.name} link={link} />
-            ))}
+            {navLinks.map((link) => (<NavLink key={link.name} link={link} />))}
             <div className='flex items-center pt-8 mt-8 border-t border-white/20 space-x-4'>
               <button onClick={() => {i18n.changeLanguage('en'); setIsMenuOpen(false);}} className={`text-xl font-medium transition-colors ${i18n.language.startsWith('en') ? 'text-gold-base' : 'text-white'}`}>EN</button>
               <span className="text-white">/</span>
