@@ -19,8 +19,7 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
 
   return (
     <motion.div 
-      className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group ${isMediaCard ? 'cursor-pointer' : ''}`}
-      onClick={isMediaCard ? onMediaClick : undefined}
+      className={`relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group`}
       whileHover={{ 
         boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)",
         borderColor: "rgba(59, 130, 246, 0.3)"
@@ -28,7 +27,11 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
     >
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
       <div className="relative h-full flex flex-col justify-between z-10">
-        <div className="flex-grow flex items-center justify-center text-center overflow-auto scrollbar-hide p-1">
+    
+        <div 
+          className={`flex-grow flex items-center justify-center text-center overflow-auto scrollbar-hide p-1 ${isMediaCard ? 'cursor-pointer' : ''}`}
+          onClick={isMediaCard ? onMediaClick : undefined}
+        >
           {testimonial.mediaType === 'quote' && (
             <div className="relative">
               <p className={`font-light text-xl leading-8 text-slate-200 transition-all duration-500 ${isLongText && !isExpanded ? 'line-clamp-6' : ''}`}>
@@ -42,21 +45,14 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
             </div>
           )}
           {isMediaCard && (
-            <div className="w-full h-full rounded-2xl overflow-hidden">
-              {testimonial.mediaType === 'image' && <img src={testimonial.content} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />}
-              {/* ===================== התיקון המרכזי כאן ===================== */}
-              {testimonial.mediaType === 'video' && (
-                <video 
-                  src={testimonial.content} 
-                  className="w-full h-full object-cover shadow-2xl" 
-                  autoPlay 
-                  loop 
-                  muted 
-                  playsInline 
-                  onClick={(e) => e.stopPropagation()} 
-                />
-              )}
-              {/* ========================================================== */}
+            <div className="w-full h-full rounded-2xl overflow-hidden relative">
+              <img src={testimonial.mediaType === 'video' ? (testimonial.videoPosterUrl || testimonial.thumbnailUrl) : testimonial.content} alt={testimonial.author} className="w-full h-full object-cover shadow-2xl" />
+              <div className="absolute inset-0 bg-black/30 flex items-center justify-center">
+                  {testimonial.mediaType === 'image' ? 
+                    <svg className="w-12 h-12 text-white/70" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg> :
+                    <svg className="w-16 h-16 text-white/70" fill="currentColor" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11V15.89a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z" /></svg>
+                  }
+              </div>
             </div>
           )}
         </div>
@@ -93,7 +89,7 @@ export const TestimonialsCarousel = () => {
         };
         fetchTestimonials();
     }, []);
-    
+
     const mediaTestimonials = useMemo(() => testimonials.filter(t => t.mediaType === 'image' || t.mediaType === 'video'), [testimonials]);
 
     const lightboxSlides = useMemo(() => mediaTestimonials.map(t => {
@@ -123,6 +119,7 @@ export const TestimonialsCarousel = () => {
                         <h2 className="text-5xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-300 to-white mb-6 font-serif leading-tight">{t('testimonials_title')}</h2>
                         <div className="w-24 h-1 bg-gradient-to-r from-gold-base to-gold-shadow mx-auto rounded-full"></div>
                     </motion.div>
+                    
                     <div className="relative max-w-7xl mx-auto">
                         <Swiper
                             modules={[Navigation, Pagination, A11y]}
