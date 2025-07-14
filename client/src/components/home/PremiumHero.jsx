@@ -13,7 +13,7 @@ export const PremiumHero = () => {
       <video autoPlay loop muted playsInline className="absolute z-0 w-auto min-w-full min-h-full max-w-none opacity-20">
         <source src={videoUrl} type="video/mp4" />
       </video>
-      <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/50 to-transparent z-10"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent z-10"></div>
       <motion.div className="relative z-20 container mx-auto px-4 text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
         <h1 
           className="text-4xl sm:text-5xl md:text-8xl font-bold font-serif leading-tight bg-gradient-to-br from-gold-highlight via-gold-base to-gold-shadow bg-clip-text text-transparent" 
