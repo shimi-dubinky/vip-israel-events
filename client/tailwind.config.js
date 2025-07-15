@@ -7,16 +7,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        'primary': '#0D1B2A',      
-        'secondary': '#8892b0',  
-        'lightest-slate': '#ccd6f6',
-        'card-bg': 'rgba(255, 255, 255, 0.05)',
+        'primary': '#FFFFFF',             // רקע ראשי -> לבן
+        'secondary': '#4A5568',           // טקסט משני -> אפור כהה
+        'lightest-slate': '#091c3b',      // טקסט בהיר -> הכחול מהלוגו
+        'card-bg': 'rgba(249, 250, 251, 0.5)', // רקע כרטיס -> אפרפר שקוף
         
-        'gold-base': '#D4A574',
-        'gold-shadow': '#B8860B',
-        'gold-highlight': '#E6C88A',
-        'gold-dark-details': '#A0522D',
-      },
+        'gold-base': '#b79145',            // הזהב החדש מהלוגו
+        'gold-shadow': '#9c7a3a',           // גוון מעט כהה יותר לצל
+        'gold-highlight': '#d3a951',        // גוון מעט בהיר יותר להרחפה
+        'gold-dark-details': '#896831',
+},
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         serif: ['"Playfair Display"', 'serif'],
