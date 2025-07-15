@@ -65,7 +65,7 @@ export const Header = () => {
         <div>
           <RouterLink to="/" className={`text-2xl font-bold transition-colors ${hasScrolled ? 'text-lightest-slate' : 'text-white'} font-serif`}>
             <img 
-      src="/images/logo-emt.png" // החלף בשם הקובץ האמיתי
+      src="/images/logo-emt.PNG" // החלף בשם הקובץ האמיתי
       alt="E.M.T VIP Logo" 
       className="h-10 w-auto" // קבע גובה רצוי, הרוחב יותאם אוטומטית
     />
