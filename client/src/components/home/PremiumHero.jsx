@@ -16,7 +16,7 @@ export const PremiumHero = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent z-10"></div>
       <motion.div className="relative z-20 container mx-auto px-4 text-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}>
         <h1 
-          className="text-4xl sm:text-5xl md:text-8xl font-bold font-serif leading-tight bg-gradient-to-br from-gold-highlight via-gold-base to-gold-shadow bg-clip-text text-transparent" 
+          className="text-4xl sm:text-5xl md:text-8xl font-bold font-serif leading-tight text-gold-base" 
           style={{ textShadow: '1px 1px 2px rgba(160, 82, 45, 0.4)' }}
         >
           {t('hero_title')}
@@ -32,7 +32,7 @@ export const PremiumHero = () => {
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5, delay: 1 }}>
           <Link 
             to="/contact" 
-            className="mt-8 md:mt-10 inline-block bg-gradient-to-br from-gold-base via-gold-shadow to-gold-dark-details text-white font-bold py-3 px-8 md:py-4 md:px-10 rounded-lg text-base md:text-lg shadow-xl shadow-gold-shadow/30 border border-gold-highlight/50 hover:shadow-2xl hover:shadow-gold-base/40 transition-all transform hover:scale-105" 
+             className="mt-8 md:mt-10 inline-block bg-gold-base text-primary font-bold py-3 px-8 md:py-4 md:px-10 rounded-lg text-base md:text-lg shadow-xl hover:shadow-gold-base/40 transition-all transform hover:scale-105"  
           >
             {t('hero_button')}
           </Link>
