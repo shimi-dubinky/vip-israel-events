@@ -40,7 +40,7 @@ export const Header = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-50 transition-all duration-300 ${hasScrolled ? 'bg-primary/80 backdrop-blur-lg border-b border-white/10' : 'bg-transparent'}`}>
+    <header className={`sticky top-0 z-50 transition-all duration-300 ${hasScrolled ? 'bg-white/60 backdrop-blur-md shadow-md border-b border-white/10' : 'bg-transparent'}`}>
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         <RouterLink to="/" className={`text-2xl font-bold transition-colors ${hasScrolled ? 'text-lightest-slate' : 'text-white'} font-serif`}>
           <img src="/images/logo-emt.PNG" alt="E.M.T VIP Logo" className="h-10 w-auto" />
