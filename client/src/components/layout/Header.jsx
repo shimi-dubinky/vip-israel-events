@@ -68,7 +68,7 @@ export const Header = () => {
       src="/images/logo-emt.png" // החלף בשם הקובץ האמיתי
       alt="E.M.T VIP Logo" 
       className="h-10 w-auto" // קבע גובה רצוי, הרוחב יותאם אוטומטית
-    /> // 
+    />
           </RouterLink>
         </div>
         <div className="hidden md:flex items-center">
