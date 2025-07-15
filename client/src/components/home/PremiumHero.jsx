@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 export const PremiumHero = () => {
+  const { t } = useTranslation();
+
   const [isLoaded, setIsLoaded] = useState(false);
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden text-lightest-slate">
