@@ -64,7 +64,11 @@ export const Header = () => {
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         <div>
           <RouterLink to="/" className={`text-2xl font-bold transition-colors ${hasScrolled ? 'text-lightest-slate' : 'text-white'} font-serif`}>
-            {t('site_name')}
+            <img 
+      src="/images/logo-emt.png" // החלף בשם הקובץ האמיתי
+      alt="E.M.T VIP Logo" 
+      className="h-10 w-auto" // קבע גובה רצוי, הרוחב יותאם אוטומטית
+    /> // 
           </RouterLink>
         </div>
         <div className="hidden md:flex items-center">
