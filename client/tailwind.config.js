@@ -12,10 +12,10 @@ export default {
         'lightest-slate': '#091c3b',      // טקסט בהיר -> הכחול מהלוגו
         'card-bg': 'rgba(249, 250, 251, 0.5)', // רקע כרטיס -> אפרפר שקוף
         
-        'gold-base': '#b79145',            // הזהב החדש מהלוגו
-        'gold-shadow': '#9c7a3a',           // גוון מעט כהה יותר לצל
-        'gold-highlight': '#d3a951',        // גוון מעט בהיר יותר להרחפה
-        'gold-dark-details': '#896831',
+        'gold-base': '#b79145',
+        'gold-shadow': '#b79145',
+        'gold-highlight': '#b79145',
+        'gold-dark-details': '#b79145',
 },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
