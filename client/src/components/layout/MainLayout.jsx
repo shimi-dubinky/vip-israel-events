@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
 import Footer from './Footer';
-import FloatingWhatsApp from './FloatingWhatsApp';
+import FloatingContactMenu from './FloatingContactMenu';
 
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
-      <FloatingWhatsApp />
+      <FloatingContactMenu />
     </div>
   );
 };
