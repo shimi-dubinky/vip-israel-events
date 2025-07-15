@@ -32,7 +32,7 @@ export const PremiumHero = () => {
         <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 0.5, delay: 1 }}>
           <Link 
             to="/contact" 
-             className="mt-8 md:mt-10 inline-block bg-gold-base text-primary font-bold py-3 px-8 md:py-4 md:px-10 rounded-lg text-base md:text-lg shadow-xl hover:shadow-gold-base/40 transition-all transform hover:scale-105"  
+            className="mt-8 md:mt-10 inline-block bg-transparent border-2 border-gold-base text-gold-base font-bold py-3 px-8 md:py-4 md:px-10 rounded-lg text-base md:text-lg transition-all duration-300 ease-in-out transform hover:scale-105 hover:bg-primary/15 hover:shadow-lg hover:shadow-gold-base/20"
           >
             {t('hero_button')}
           </Link>

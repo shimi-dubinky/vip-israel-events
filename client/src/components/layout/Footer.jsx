@@ -11,7 +11,7 @@ const Footer = () => {
           &copy; {currentYear} {t('site_name')}. {t('footer_rights')}
         </p>
         <p className="text-sm mt-4 md:mt-0">
-          Built with ♥ by <a href="https://your-future-portfolio.com" target="_blank" rel="noopener noreferrer" className="font-medium text-lightest-slate hover:text-gold-base transition-colors">Shimon Dubinky</a>
+          Built by <a href="https://your-future-portfolio.com" target="_blank" rel="noopener noreferrer" className="font-medium text-lightest-slate hover:text-gold-base transition-colors">Shimon Dubinky</a>
         </p>
       </div>
     </footer>
