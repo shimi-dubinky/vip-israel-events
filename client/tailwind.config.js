@@ -19,7 +19,7 @@ export default {
 },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        serif: ['"Playfair Display"', 'serif'],
+        serif: ['"Frank Ruhl Libre"', '"Playfair Display"', 'serif'], 
       },
     },
   },

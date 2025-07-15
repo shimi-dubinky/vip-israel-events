@@ -77,7 +77,7 @@ export const Header = () => {
           </div>
           <div className='flex items-center border-s border-white/20 ms-8 ps-8 space-x-2'>
             <button onClick={() => i18n.changeLanguage('en')} className={`font-medium transition-colors ${i18n.language.startsWith('en') ? 'text-gold-base' : (hasScrolled ? 'text-lightest-slate' : 'text-white')}`}>EN</button>
-            <span className={hasScrolled ? 'text-lightest-slate' : 'text-white'}>/</span>
+            <span className="text-secondary">/</span>
             <button onClick={() => i18n.changeLanguage('he')} className={`font-medium transition-colors ${i18n.language === 'he' ? 'text-gold-base' : (hasScrolled ? 'text-lightest-slate' : 'text-white')}`}>HE</button>
           </div>
         </div>

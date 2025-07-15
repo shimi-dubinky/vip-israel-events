@@ -10,7 +10,7 @@ export const PremiumHero = () => {
 
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden text-white">
-      <video autoPlay loop muted playsInline className="absolute z-0 w-auto min-w-full min-h-full max-w-none opacity-80 mix-blend-luminosity">
+      <video autoPlay loop muted playsInline className="absolute z-0 w-auto min-w-full min-h-full max-w-none opacity-80">
         <source src={videoUrl} type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-t from-primary via-primary/30 to-transparent z-10"></div>

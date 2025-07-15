@@ -19,7 +19,7 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
 
   return (
     <motion.div 
-      className="relative bg-gradient-to-br from-slate-800/80 to-slate-900/90 backdrop-blur-xl border border-white/20 p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group"
+      className="relative bg-white backdrop-blur-xl border border-gold-base p-6 md:p-8 rounded-3xl shadow-2xl flex flex-col w-[85vw] max-w-[420px] h-[85vw] max-h-[420px] overflow-hidden group"
       whileHover={{ 
         boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.2)",
         borderColor: "rgba(59, 130, 246, 0.3)"
@@ -64,9 +64,9 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
           )}
         </div>
 
-        <footer className="mt-4 flex items-center pt-4 border-t border-white/10 flex-shrink-0">
-          <div className="relative"><img src={testimonial.thumbnailUrl} alt={testimonial.author} className="w-14 h-14 rounded-full mr-4 object-cover border-2 border-white/20 shadow-lg"/><div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-500/20" /></div>
-          <div><p className="font-semibold text-white text-base tracking-wide">{testimonial.author}</p><p className="text-sm text-slate-400 mt-1">{testimonial.origin}</p></div>
+        <footer className="mt-4 flex items-center pt-4 border-t border-gold-base/30 flex-shrink-0">
+          <div className="relative"><img src={testimonial.thumbnailUrl} alt={testimonial.author} className="w-14 h-14 rounded-full mr-4 object-cover border-2 border-gold-base/30 shadow-lg"/><div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-500/20" /></div>
+          <div><p className="font-semibold text-primary text-base tracking-wide">{testimonial.author}</p><p className="text-sm text-secondary mt-1">{testimonial.origin}</p></div>
         </footer>
       </div>
     </motion.div>
