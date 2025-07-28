@@ -3,25 +3,30 @@ import re
 
 input_file = "translation.json"
 output_file = "translation_fixed.json"
-LRM = "\u200E"
+LRM = "\u200E"  # Left-to-Right Mark
 
 def fix_mixed_direction(text):
+    # הסרת תווי LTR marks מיותרים שגורמים לרווחים
+    text = text.replace("‎", "")
+    
     def wrap_english(match):
         return f"{LRM}{match.group(0)}{LRM}"
     
     # עטיפת טקסטים באנגלית/מספרים/שמות קבצים וכו'
-    text = re.sub(r'\b[\w\-/.@]+\b', wrap_english, text)
-
-    # תיקון פסיקים - עברית:
-    # בעברית הפסיק צריך להדבק למילה שלפניו ולא לזו שאחריו
-    # מסיר רווחים לפני פסיק (בעיה עיקרית)
+    text = re.sub(r'\b[A-Za-z0-9\-/.@]+\b', wrap_english, text)
+    
+    # תיקון פסיקים בעברית:
+    # מסיר רווחים לפני פסיק
     text = re.sub(r'\s+,', ',', text)
     
-    # מוסיף רווח אחרי פסיק אם חסר (רק אם יש תו אחרי הפסיק שלא רווח)
+    # מוסיף רווח אחרי פסיק אם חסר
     text = re.sub(r',(?=\S)', ', ', text)
     
-    # תיקון נוסף: מטפל במקרים של פסיקים שכבר יש אחריהם רווח אבל יותר מדי
-    text = re.sub(r',\s{2,}', ', ', text)
+    # תיקון רווחים מרובים
+    text = re.sub(r'\s{2,}', ' ', text)
+    
+    # ניקוי רווחים בתחילת ובסוף
+    text = text.strip()
 
     return text
 
@@ -51,10 +56,10 @@ print("✅ קובץ מתוקן נוצר בהצלחה בשם translation_fixed.js
 # הדפסת דוגמאות לבדיקה
 print("\n🔍 דוגמאות לבדיקה:")
 test_strings = [
-    "מילה ,מילה",
-    "טקסט , טקסט נוסף",
-    "מילה,מילה",
-    "משהו  ,  משהו אחר"
+    "‎‎‎E.M.T‎‎‎ ‎‎‎VIP‎‎‎",
+    "‎‎‎חווית‎‎‎ ‎‎‎המורשת‎‎‎ ‎‎‎שלכם‎‎‎ ‎‎‎בישראל‎‎‎, ‎‎‎במלאכת‎‎‎",
+    "‎‎‎A.M.T‎‎‎ ‎‎‎VIP‎‎‎‏ - ‎‎‎הפקת‎‎‎",
+    "‎‎‎שירותי‎‎‎ ‎‎‎קונסיירז‎‎‎' ‎‎‎ו-VIP‎‎‎‏"
 ]
 
 for test in test_strings:
