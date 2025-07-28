@@ -66,7 +66,7 @@ const TestimonialCard = ({ testimonial, onMediaClick }) => {
 
         <footer className="mt-4 flex items-center pt-4 border-t border-gold-base/30 flex-shrink-0">
           <div className="relative"><img src={testimonial.thumbnailUrl} alt={testimonial.author} className="w-14 h-14 rounded-full mr-4 object-cover border-2 border-gold-base/30 shadow-lg"/><div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400/20 to-purple-500/20" /></div>
-          <div><p className="font-semibold text-primary text-base tracking-wide">{testimonial.author}</p><p className="text-sm text-secondary mt-1">{testimonial.origin}</p></div>
+          <div><p className="font-semibold text-lightest-slate text-base tracking-wide">{testimonial.author}</p><p className="text-sm text-secondary-darker mt-1">{testimonial.origin}</p></div>
         </footer>
       </div>
     </motion.div>

@@ -89,41 +89,41 @@ const AdminGalleryPage = () => {
   }, [adminFilter, items]);
 
   return (
-    <div className="min-h-screen bg-primary text-lightest-slate p-8" dir="rtl">
+    <div className="min-h-screen bg-gray-100 text-gray-800 p-8" dir="rtl">
       <div className="max-w-7xl mx-auto">
-        <Link to="/admin/dashboard" className="text-gold-base hover:text-gold-highlight mb-4 inline-block">&rarr; חזרה ללוח הבקרה</Link>
-        <h1 className="text-3xl font-bold text-gold-highlight mb-6">ניהול גלריה</h1>
-        <div className="bg-slate-800 p-6 rounded-lg mb-8">
-            <h2 className="text-2xl font-semibold text-gold-base mb-4">הוספת פריט חדש</h2>
+        <Link to="/admin/dashboard" className="text-gold-base hover:text-gold-highlight mb-4 inline-block font-semibold">&rarr; חזרה ללוח הבקרה</Link>
+        <h1 className="text-3xl font-bold text-primary mb-6 font-serif">ניהול גלריה</h1>
+        <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8">
+            <h2 className="text-2xl font-semibold text-gray-700 mb-4 font-serif">הוספת פריט חדש</h2>
             <form onSubmit={submitHandler}>
                 <div className="grid md:grid-cols-3 gap-4">
-                    <input type="text" placeholder="כותרת (אופציונלי, לזיהוי פנימי)" value={title} onChange={(e) => setTitle(e.target.value)} className="bg-slate-700 p-2 rounded w-full placeholder:text-slate-400" />
-                    <select value={category} onChange={(e) => setCategory(e.target.value)} className="bg-slate-700 p-2 rounded w-full">
+                    <input type="text" placeholder="כותרת (לזיהוי פנימי)" value={title} onChange={(e) => setTitle(e.target.value)} className="bg-gray-50 border border-gray-300 p-2 rounded w-full focus:ring-2 focus:ring-gold-base focus:border-transparent" />
+                    <select value={category} onChange={(e) => setCategory(e.target.value)} className="bg-gray-50 border border-gray-300 p-2 rounded w-full focus:ring-2 focus:ring-gold-base focus:border-transparent">
                         {CATEGORIES.map(cat => <option key={cat.key} value={cat.key}>{t(cat.titleKey)}</option>)}
                     </select>
-                    <input type="file" id="file-input" onChange={(e) => setFile(e.target.files[0])} required className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gold-base file:text-primary hover:file:bg-gold-highlight" />
+                    <input type="file" id="file-input" onChange={(e) => setFile(e.target.files[0])} required className="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gold-base/20 file:text-gold-base hover:file:bg-gold-base/30"/>
                 </div>
-                <button type="submit" disabled={uploading} className="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded disabled:bg-gray-500">{uploading ? 'מעלה קובץ...' : 'הוסף פריט'}</button>
+                <button type="submit" disabled={uploading} className="mt-4 bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded disabled:bg-gray-500 transition-colors">{uploading ? 'מעלה קובץ...' : 'הוסף פריט'}</button>
                 {formError && <p className="text-red-500 mt-2">{formError}</p>}
             </form>
         </div>
         <div className="mb-4">
-            <h3 className="text-xl text-gold-base mb-2">סינון תצוגה:</h3>
+            <h3 className="text-xl text-gray-700 mb-2 font-serif">סינון תצוגה:</h3>
             <div className="flex flex-wrap gap-2">
-                <button onClick={() => setAdminFilter('all')} className={`px-4 py-1 text-sm rounded-full ${adminFilter === 'all' ? 'bg-gold-base text-primary' : 'bg-slate-700'}`}>{t('all')}</button>
-                {CATEGORIES.map(cat => ( <button key={cat.key} onClick={() => setAdminFilter(cat.key)} className={`px-4 py-1 text-sm rounded-full ${adminFilter === cat.key ? 'bg-gold-base text-primary' : 'bg-slate-700'}`}>{t(cat.titleKey)}</button>))}
+                <button onClick={() => setAdminFilter('all')} className={`px-4 py-1 text-sm rounded-full ${adminFilter === 'all' ? 'bg-gold-base text-white' : 'bg-gray-200 text-gray-700'}`}>{t('all')}</button>
+                {CATEGORIES.map(cat => ( <button key={cat.key} onClick={() => setAdminFilter(cat.key)} className={`px-4 py-1 text-sm rounded-full ${adminFilter === cat.key ? 'bg-gold-base text-white' : 'bg-gray-200 text-gray-700'}`}>{t(cat.titleKey)}</button>))}
             </div>
         </div>
         {loading ? <p>טוען...</p> : error ? <p className="text-red-500">{error}</p> : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredItems.map(item => (
-              <div key={item._id} className="bg-slate-800 rounded-lg p-2 relative group">
+              <div key={item._id} className="bg-white rounded-lg p-2 relative group shadow-sm border border-gray-200">
                 <div className="relative">
                    {item.mediaType === 'image' ? <img src={item.mediaUrl} alt={item.title} className="w-full h-40 object-cover rounded"/> : <video src={item.mediaUrl} className="w-full h-40 object-cover rounded" controls/>}
                    <span className={`absolute top-2 right-2 h-3 w-3 rounded-full ${categoryColorMap[item.category] || 'bg-gray-400'}`} title={t(CATEGORIES.find(c => c.key === item.category)?.titleKey || '')}></span>
                 </div>
-                <p className="mt-2 text-center text-sm truncate" title={item.title}>{item.title || '(ללא כותרת)'}</p>
-                <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <p className="mt-2 text-center text-sm truncate text-gray-600" title={item.title}>{item.title || '(ללא כותרת)'}</p>
+                <div className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
                     <button onClick={() => deleteHandler(item._id)} className="bg-red-600 text-white rounded-full p-3 hover:bg-red-700"><svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg></button>
                 </div>
               </div>

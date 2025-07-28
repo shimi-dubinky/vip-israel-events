@@ -8,7 +8,8 @@ export default {
     extend: {
       colors: {
         'primary': '#FFFFFF',             // רקע ראשי -> לבן
-        'secondary': '#4A5568',           // טקסט משני -> אפור כהה
+        'secondary': '#4A5568',             // טקסט משני -> אפור כהה
+        'secondary-darker': '#374151',   //טקסט משני כהה יותר       
         'lightest-slate': '#091c3b',      // טקסט בהיר -> הכחול מהלוגו
         'card-bg': 'rgba(249, 250, 251, 0.5)', // רקע כרטיס -> אפרפר שקוף
         
